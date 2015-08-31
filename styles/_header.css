@@ -1,0 +1,40 @@
+.header {
+    background: #1caad9;
+}
+    .logo {
+        background: #1a252b;
+    }
+    .logo a {
+        display: block;
+    }
+    .logo img {
+        display: block;
+        margin: 8px 0 0 10px;
+    }
+
+.toolbar-tool {
+    float: left;
+    padding: 15px 20px;
+}
+
+.search label {
+    color: #888;
+    font-size: 0.8rem;
+    padding-right: 4px;
+}
+
+.filters {
+    display: none;
+    float: right;
+    padding: 15px 20px;
+}
+    .filters .btn {
+        color: rgba(255,255,255,.6);
+        background: #1687ac;
+    }
+    .filters .btn.active,
+    .filters .btn:active,
+    .filters .btn:hover {
+        color: #FFF;
+        background: #106E8D;
+    }
