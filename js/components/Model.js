@@ -40,7 +40,7 @@ var Model = React.createClass({
         var avatar = this.getAvatar(32);
 
         return (
-            <li data-uid={this.props.model.urlid} className="grid-item"  onClick={this.props.clickHandler} onMouseOver={this.props.mouseOverHandler} onMouseOut={this.handleMouseOut}>
+            <div data-uid={this.props.model.urlid} className="grid-item"  onClick={this.props.clickHandler} onMouseOver={this.props.mouseOverHandler} onMouseOut={this.handleMouseOut}>
                 <div className="modelcard" data-uid={this.props.model.urlid}>
                     <a href={this.props.model.viewerUrl} target="_blank">
                         <div className="modelcard-preview" style={{backgroundImage: 'url(' + preview + ')'}}>
@@ -68,7 +68,7 @@ var Model = React.createClass({
                         </div>
                     </a>
                 </div>
-            </li>
+            </div>
         );
     }
 });

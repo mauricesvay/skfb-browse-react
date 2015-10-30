@@ -1,5 +1,7 @@
 import React from 'react';
 import Grid from './Grid';
+import ReactList from 'react-list';
+var Model = require('./Model');
 
 let Browse = {
 
@@ -26,10 +28,32 @@ let Browse = {
         this.fetchData();
     },
 
+    renderItem(index, key) {
+        var model = this.state.models[index];
+        return <Model key={model.urlid} model={model}></Model>
+    },
+
+    renderLoadMore: function() {
+        if (this.state.isLoading) {
+            return <button onClick={this.onLoadMoreClicked} disabled="disabled">Loading</button>
+        } else {
+            return <button onClick={this.onLoadMoreClicked}>Load more</button>
+        }
+    },
+
     render() {
+        console.log(this.state.models.length + ' items');
         return (
             <div>
-                <Grid models={this.state.models} loadMoreHandler={this.onLoadMoreClicked} isLoading={this.state.isLoading}/>
+                <ReactList
+                    ref="list"
+                    itemRenderer={this.renderItem}
+                    length={this.state.models.length}
+                    type="uniform"
+                />
+                <div style={{padding: '10px', clear: 'both', textAlign: 'center'}}>
+                    {this.renderLoadMore()}
+                </div>
             </div>
         )
     }
