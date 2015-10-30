@@ -19658,19 +19658,19 @@
 
 	var _componentsStaffpicks2 = _interopRequireDefault(_componentsStaffpicks);
 
-	var _componentsPopular = __webpack_require__(321);
+	var _componentsPopular = __webpack_require__(322);
 
 	var _componentsPopular2 = _interopRequireDefault(_componentsPopular);
 
-	var _componentsRecent = __webpack_require__(322);
+	var _componentsRecent = __webpack_require__(323);
 
 	var _componentsRecent2 = _interopRequireDefault(_componentsRecent);
 
-	var _componentsSearch = __webpack_require__(323);
+	var _componentsSearch = __webpack_require__(324);
 
 	var _componentsSearch2 = _interopRequireDefault(_componentsSearch);
 
-	var _componentsCategory = __webpack_require__(324);
+	var _componentsCategory = __webpack_require__(325);
 
 	var _componentsCategory2 = _interopRequireDefault(_componentsCategory);
 
@@ -24065,7 +24065,7 @@
 	var App = _react2['default'].createClass({
 	    displayName: 'App',
 
-	    mixins: [_reactRouter.Navigation],
+	    mixins: [_reactRouter.History],
 
 	    getInitialState: function getInitialState() {
 
@@ -24097,7 +24097,7 @@
 
 	    onSearch: function onSearch(e) {
 	        e.preventDefault();
-	        this.transitionTo('/search?q=' + this.state.q);
+	        this.history.pushState(null, '/search', { q: this.state.q });
 	    },
 
 	    onSearchChange: function onSearchChange(e) {
@@ -29381,7 +29381,7 @@
 	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
 
 	var _ = {
-	    uniq: __webpack_require__(312)
+	    uniq: __webpack_require__(313)
 	};
 
 	var Staffpicks = _react2['default'].createClass({
@@ -29414,6 +29414,8 @@
 
 	'use strict';
 
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _react = __webpack_require__(1);
@@ -29424,7 +29426,7 @@
 
 	var _Grid2 = _interopRequireDefault(_Grid);
 
-	var _reactList = __webpack_require__(325);
+	var _reactList = __webpack_require__(312);
 
 	var _reactList2 = _interopRequireDefault(_reactList);
 
@@ -29447,12 +29449,28 @@
 	        this.fetchData();
 	    },
 
-	    onLoadMoreClicked: function onLoadMoreClicked(e) {
-	        e.preventDefault();
-	        this.setState({
-	            isLoading: true
-	        });
-	        this.fetchData();
+	    // onLoadMoreClicked(e) {
+	    //     e.preventDefault();
+	    //     this.setState({
+	    //         isLoading: true
+	    //     });
+	    //     this.fetchData();
+	    // },
+
+	    handleScroll: function handleScroll(e) {
+	        var _refs$list$getVisibleRange = this.refs['list'].getVisibleRange();
+
+	        var _refs$list$getVisibleRange2 = _slicedToArray(_refs$list$getVisibleRange, 2);
+
+	        var firstVisibleIndex = _refs$list$getVisibleRange2[0];
+	        var lastVisibleIndex = _refs$list$getVisibleRange2[1];
+
+	        if (lastVisibleIndex >= this.state.models.length - 12) {
+	            this.setState({
+	                isLoading: true
+	            });
+	            this.fetchData();
+	        }
 	    },
 
 	    renderItem: function renderItem(index, key) {
@@ -29460,38 +29478,16 @@
 	        return _react2['default'].createElement(Model, { key: model.urlid, model: model });
 	    },
 
-	    renderLoadMore: function renderLoadMore() {
-	        if (this.state.isLoading) {
-	            return _react2['default'].createElement(
-	                'button',
-	                { onClick: this.onLoadMoreClicked, disabled: 'disabled' },
-	                'Loading'
-	            );
-	        } else {
-	            return _react2['default'].createElement(
-	                'button',
-	                { onClick: this.onLoadMoreClicked, onMouseOver: this.onLoadMoreClicked },
-	                'Load more'
-	            );
-	        }
-	    },
-
 	    render: function render() {
-	        console.log(this.state.models.length + ' items');
 	        return _react2['default'].createElement(
 	            'div',
-	            null,
+	            { className: 'browse-grid', onScroll: this.handleScroll },
 	            _react2['default'].createElement(_reactList2['default'], {
 	                ref: 'list',
 	                itemRenderer: this.renderItem,
 	                length: this.state.models.length,
 	                type: 'uniform'
-	            }),
-	            _react2['default'].createElement(
-	                'div',
-	                { style: { padding: '10px', clear: 'both', textAlign: 'center' } },
-	                this.renderLoadMore()
-	            )
+	            })
 	        );
 	    }
 
@@ -30896,559 +30892,6 @@
 /* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseCallback = __webpack_require__(283),
-	    baseUniq = __webpack_require__(313),
-	    isIterateeCall = __webpack_require__(268),
-	    sortedUniq = __webpack_require__(320);
-
-	/**
-	 * Creates a duplicate-free version of an array, using
-	 * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
-	 * for equality comparisons, in which only the first occurence of each element
-	 * is kept. Providing `true` for `isSorted` performs a faster search algorithm
-	 * for sorted arrays. If an iteratee function is provided it's invoked for
-	 * each element in the array to generate the criterion by which uniqueness
-	 * is computed. The `iteratee` is bound to `thisArg` and invoked with three
-	 * arguments: (value, index, array).
-	 *
-	 * If a property name is provided for `iteratee` the created `_.property`
-	 * style callback returns the property value of the given element.
-	 *
-	 * If a value is also provided for `thisArg` the created `_.matchesProperty`
-	 * style callback returns `true` for elements that have a matching property
-	 * value, else `false`.
-	 *
-	 * If an object is provided for `iteratee` the created `_.matches` style
-	 * callback returns `true` for elements that have the properties of the given
-	 * object, else `false`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @alias unique
-	 * @category Array
-	 * @param {Array} array The array to inspect.
-	 * @param {boolean} [isSorted] Specify the array is sorted.
-	 * @param {Function|Object|string} [iteratee] The function invoked per iteration.
-	 * @param {*} [thisArg] The `this` binding of `iteratee`.
-	 * @returns {Array} Returns the new duplicate-value-free array.
-	 * @example
-	 *
-	 * _.uniq([2, 1, 2]);
-	 * // => [2, 1]
-	 *
-	 * // using `isSorted`
-	 * _.uniq([1, 1, 2], true);
-	 * // => [1, 2]
-	 *
-	 * // using an iteratee function
-	 * _.uniq([1, 2.5, 1.5, 2], function(n) {
-	 *   return this.floor(n);
-	 * }, Math);
-	 * // => [1, 2.5]
-	 *
-	 * // using the `_.property` callback shorthand
-	 * _.uniq([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
-	 * // => [{ 'x': 1 }, { 'x': 2 }]
-	 */
-	function uniq(array, isSorted, iteratee, thisArg) {
-	  var length = array ? array.length : 0;
-	  if (!length) {
-	    return [];
-	  }
-	  if (isSorted != null && typeof isSorted != 'boolean') {
-	    thisArg = iteratee;
-	    iteratee = isIterateeCall(array, isSorted, thisArg) ? undefined : isSorted;
-	    isSorted = false;
-	  }
-	  iteratee = iteratee == null ? iteratee : baseCallback(iteratee, thisArg, 3);
-	  return (isSorted)
-	    ? sortedUniq(array, iteratee)
-	    : baseUniq(array, iteratee);
-	}
-
-	module.exports = uniq;
-
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseIndexOf = __webpack_require__(314),
-	    cacheIndexOf = __webpack_require__(316),
-	    createCache = __webpack_require__(317);
-
-	/** Used as the size to enable large array optimizations. */
-	var LARGE_ARRAY_SIZE = 200;
-
-	/**
-	 * The base implementation of `_.uniq` without support for callback shorthands
-	 * and `this` binding.
-	 *
-	 * @private
-	 * @param {Array} array The array to inspect.
-	 * @param {Function} [iteratee] The function invoked per iteration.
-	 * @returns {Array} Returns the new duplicate free array.
-	 */
-	function baseUniq(array, iteratee) {
-	  var index = -1,
-	      indexOf = baseIndexOf,
-	      length = array.length,
-	      isCommon = true,
-	      isLarge = isCommon && length >= LARGE_ARRAY_SIZE,
-	      seen = isLarge ? createCache() : null,
-	      result = [];
-
-	  if (seen) {
-	    indexOf = cacheIndexOf;
-	    isCommon = false;
-	  } else {
-	    isLarge = false;
-	    seen = iteratee ? [] : result;
-	  }
-	  outer:
-	  while (++index < length) {
-	    var value = array[index],
-	        computed = iteratee ? iteratee(value, index, array) : value;
-
-	    if (isCommon && value === value) {
-	      var seenIndex = seen.length;
-	      while (seenIndex--) {
-	        if (seen[seenIndex] === computed) {
-	          continue outer;
-	        }
-	      }
-	      if (iteratee) {
-	        seen.push(computed);
-	      }
-	      result.push(value);
-	    }
-	    else if (indexOf(seen, computed, 0) < 0) {
-	      if (iteratee || isLarge) {
-	        seen.push(computed);
-	      }
-	      result.push(value);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = baseUniq;
-
-
-/***/ },
-/* 314 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var indexOfNaN = __webpack_require__(315);
-
-	/**
-	 * The base implementation of `_.indexOf` without support for binary searches.
-	 *
-	 * @private
-	 * @param {Array} array The array to search.
-	 * @param {*} value The value to search for.
-	 * @param {number} fromIndex The index to search from.
-	 * @returns {number} Returns the index of the matched value, else `-1`.
-	 */
-	function baseIndexOf(array, value, fromIndex) {
-	  if (value !== value) {
-	    return indexOfNaN(array, fromIndex);
-	  }
-	  var index = fromIndex - 1,
-	      length = array.length;
-
-	  while (++index < length) {
-	    if (array[index] === value) {
-	      return index;
-	    }
-	  }
-	  return -1;
-	}
-
-	module.exports = baseIndexOf;
-
-
-/***/ },
-/* 315 */
-/***/ function(module, exports) {
-
-	/**
-	 * Gets the index at which the first occurrence of `NaN` is found in `array`.
-	 *
-	 * @private
-	 * @param {Array} array The array to search.
-	 * @param {number} fromIndex The index to search from.
-	 * @param {boolean} [fromRight] Specify iterating from right to left.
-	 * @returns {number} Returns the index of the matched `NaN`, else `-1`.
-	 */
-	function indexOfNaN(array, fromIndex, fromRight) {
-	  var length = array.length,
-	      index = fromIndex + (fromRight ? 0 : -1);
-
-	  while ((fromRight ? index-- : ++index < length)) {
-	    var other = array[index];
-	    if (other !== other) {
-	      return index;
-	    }
-	  }
-	  return -1;
-	}
-
-	module.exports = indexOfNaN;
-
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(248);
-
-	/**
-	 * Checks if `value` is in `cache` mimicking the return signature of
-	 * `_.indexOf` by returning `0` if the value is found, else `-1`.
-	 *
-	 * @private
-	 * @param {Object} cache The cache to search.
-	 * @param {*} value The value to search for.
-	 * @returns {number} Returns `0` if `value` is found, else `-1`.
-	 */
-	function cacheIndexOf(cache, value) {
-	  var data = cache.data,
-	      result = (typeof value == 'string' || isObject(value)) ? data.set.has(value) : data.hash[value];
-
-	  return result ? 0 : -1;
-	}
-
-	module.exports = cacheIndexOf;
-
-
-/***/ },
-/* 317 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {var SetCache = __webpack_require__(318),
-	    getNative = __webpack_require__(245);
-
-	/** Native method references. */
-	var Set = getNative(global, 'Set');
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeCreate = getNative(Object, 'create');
-
-	/**
-	 * Creates a `Set` cache object to optimize linear searches of large arrays.
-	 *
-	 * @private
-	 * @param {Array} [values] The values to cache.
-	 * @returns {null|Object} Returns the new cache object if `Set` is supported, else `null`.
-	 */
-	function createCache(values) {
-	  return (nativeCreate && Set) ? new SetCache(values) : null;
-	}
-
-	module.exports = createCache;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 318 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {var cachePush = __webpack_require__(319),
-	    getNative = __webpack_require__(245);
-
-	/** Native method references. */
-	var Set = getNative(global, 'Set');
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeCreate = getNative(Object, 'create');
-
-	/**
-	 *
-	 * Creates a cache object to store unique values.
-	 *
-	 * @private
-	 * @param {Array} [values] The values to cache.
-	 */
-	function SetCache(values) {
-	  var length = values ? values.length : 0;
-
-	  this.data = { 'hash': nativeCreate(null), 'set': new Set };
-	  while (length--) {
-	    this.push(values[length]);
-	  }
-	}
-
-	// Add functions to the `Set` cache.
-	SetCache.prototype.push = cachePush;
-
-	module.exports = SetCache;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 319 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(248);
-
-	/**
-	 * Adds `value` to the cache.
-	 *
-	 * @private
-	 * @name push
-	 * @memberOf SetCache
-	 * @param {*} value The value to cache.
-	 */
-	function cachePush(value) {
-	  var data = this.data;
-	  if (typeof value == 'string' || isObject(value)) {
-	    data.set.add(value);
-	  } else {
-	    data.hash[value] = true;
-	  }
-	}
-
-	module.exports = cachePush;
-
-
-/***/ },
-/* 320 */
-/***/ function(module, exports) {
-
-	/**
-	 * An implementation of `_.uniq` optimized for sorted arrays without support
-	 * for callback shorthands and `this` binding.
-	 *
-	 * @private
-	 * @param {Array} array The array to inspect.
-	 * @param {Function} [iteratee] The function invoked per iteration.
-	 * @returns {Array} Returns the new duplicate free array.
-	 */
-	function sortedUniq(array, iteratee) {
-	  var seen,
-	      index = -1,
-	      length = array.length,
-	      resIndex = -1,
-	      result = [];
-
-	  while (++index < length) {
-	    var value = array[index],
-	        computed = iteratee ? iteratee(value, index, array) : value;
-
-	    if (!index || seen !== computed) {
-	      seen = computed;
-	      result[++resIndex] = value;
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = sortedUniq;
-
-
-/***/ },
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _sketchfabJs = __webpack_require__(208);
-
-	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
-
-	var _BrowseMixin = __webpack_require__(279);
-
-	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
-
-	var _ = {
-	    uniq: __webpack_require__(312)
-	};
-
-	var Popular = _react2['default'].createClass({
-	    displayName: 'Popular',
-
-	    mixins: [_BrowseMixin2['default']],
-
-	    fetchData: function fetchData() {
-	        var _this = this;
-
-	        _sketchfabJs2['default'].Models.popular(this.state.offset).then(function (response) {
-
-	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
-
-	            _this.setState({
-	                models: models,
-	                offset: models.length,
-	                isLoading: false
-	            });
-	        });
-	    }
-	});
-
-	module.exports = Popular;
-
-/***/ },
-/* 322 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _sketchfabJs = __webpack_require__(208);
-
-	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
-
-	var _BrowseMixin = __webpack_require__(279);
-
-	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
-
-	var _ = {
-	    uniq: __webpack_require__(312)
-	};
-
-	var Recent = _react2['default'].createClass({
-	    displayName: 'Recent',
-
-	    mixins: [_BrowseMixin2['default']],
-
-	    fetchData: function fetchData() {
-	        var _this = this;
-
-	        _sketchfabJs2['default'].Models.recent(this.state.offset).then(function (response) {
-	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
-
-	            _this.setState({
-	                models: models,
-	                offset: models.length,
-	                isLoading: false
-	            });
-	        });
-	    }
-	});
-
-	module.exports = Recent;
-
-/***/ },
-/* 323 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _sketchfabJs = __webpack_require__(208);
-
-	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
-
-	var _BrowseMixin = __webpack_require__(279);
-
-	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
-
-	var _ = {
-	    uniq: __webpack_require__(312)
-	};
-
-	var Search = _react2['default'].createClass({
-	    displayName: 'Search',
-
-	    mixins: [_BrowseMixin2['default']],
-
-	    fetchData: function fetchData() {
-	        var _this = this;
-
-	        _sketchfabJs2['default'].Models.search(this.props.query.q, this.state.offset).then(function (response) {
-
-	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
-
-	            _this.setState({
-	                models: models,
-	                offset: models.length,
-	                isLoading: false
-	            });
-	        });
-	    }
-	});
-
-	module.exports = Search;
-
-/***/ },
-/* 324 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _sketchfabJs = __webpack_require__(208);
-
-	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
-
-	var _BrowseMixin = __webpack_require__(279);
-
-	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
-
-	var _ = {
-	    uniq: __webpack_require__(312)
-	};
-
-	var Category = _react2['default'].createClass({
-	    displayName: 'Category',
-
-	    mixins: [_BrowseMixin2['default']],
-
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        if (this.props.params.category !== nextProps.params.category) {
-	            this.setState({
-	                models: [],
-	                offset: 0,
-	                isLoading: true
-	            });
-	            this.fetchData();
-	        }
-	    },
-
-	    fetchData: function fetchData() {
-	        var _this = this;
-
-	        _sketchfabJs2['default'].Models.byCategory(this.props.params.category, this.state.offset).then(function (response) {
-
-	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
-
-	            _this.setState({
-	                models: models,
-	                offset: models.length,
-	                isLoading: false
-	            });
-	        });
-	    }
-	});
-
-	module.exports = Category;
-
-/***/ },
-/* 325 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	  if (true) {
 	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, module, __webpack_require__(1), __webpack_require__(158)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -31976,6 +31419,559 @@
 	  module.exports = _default;
 	});
 
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseCallback = __webpack_require__(283),
+	    baseUniq = __webpack_require__(314),
+	    isIterateeCall = __webpack_require__(268),
+	    sortedUniq = __webpack_require__(321);
+
+	/**
+	 * Creates a duplicate-free version of an array, using
+	 * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+	 * for equality comparisons, in which only the first occurence of each element
+	 * is kept. Providing `true` for `isSorted` performs a faster search algorithm
+	 * for sorted arrays. If an iteratee function is provided it's invoked for
+	 * each element in the array to generate the criterion by which uniqueness
+	 * is computed. The `iteratee` is bound to `thisArg` and invoked with three
+	 * arguments: (value, index, array).
+	 *
+	 * If a property name is provided for `iteratee` the created `_.property`
+	 * style callback returns the property value of the given element.
+	 *
+	 * If a value is also provided for `thisArg` the created `_.matchesProperty`
+	 * style callback returns `true` for elements that have a matching property
+	 * value, else `false`.
+	 *
+	 * If an object is provided for `iteratee` the created `_.matches` style
+	 * callback returns `true` for elements that have the properties of the given
+	 * object, else `false`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @alias unique
+	 * @category Array
+	 * @param {Array} array The array to inspect.
+	 * @param {boolean} [isSorted] Specify the array is sorted.
+	 * @param {Function|Object|string} [iteratee] The function invoked per iteration.
+	 * @param {*} [thisArg] The `this` binding of `iteratee`.
+	 * @returns {Array} Returns the new duplicate-value-free array.
+	 * @example
+	 *
+	 * _.uniq([2, 1, 2]);
+	 * // => [2, 1]
+	 *
+	 * // using `isSorted`
+	 * _.uniq([1, 1, 2], true);
+	 * // => [1, 2]
+	 *
+	 * // using an iteratee function
+	 * _.uniq([1, 2.5, 1.5, 2], function(n) {
+	 *   return this.floor(n);
+	 * }, Math);
+	 * // => [1, 2.5]
+	 *
+	 * // using the `_.property` callback shorthand
+	 * _.uniq([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
+	 * // => [{ 'x': 1 }, { 'x': 2 }]
+	 */
+	function uniq(array, isSorted, iteratee, thisArg) {
+	  var length = array ? array.length : 0;
+	  if (!length) {
+	    return [];
+	  }
+	  if (isSorted != null && typeof isSorted != 'boolean') {
+	    thisArg = iteratee;
+	    iteratee = isIterateeCall(array, isSorted, thisArg) ? undefined : isSorted;
+	    isSorted = false;
+	  }
+	  iteratee = iteratee == null ? iteratee : baseCallback(iteratee, thisArg, 3);
+	  return (isSorted)
+	    ? sortedUniq(array, iteratee)
+	    : baseUniq(array, iteratee);
+	}
+
+	module.exports = uniq;
+
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseIndexOf = __webpack_require__(315),
+	    cacheIndexOf = __webpack_require__(317),
+	    createCache = __webpack_require__(318);
+
+	/** Used as the size to enable large array optimizations. */
+	var LARGE_ARRAY_SIZE = 200;
+
+	/**
+	 * The base implementation of `_.uniq` without support for callback shorthands
+	 * and `this` binding.
+	 *
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {Function} [iteratee] The function invoked per iteration.
+	 * @returns {Array} Returns the new duplicate free array.
+	 */
+	function baseUniq(array, iteratee) {
+	  var index = -1,
+	      indexOf = baseIndexOf,
+	      length = array.length,
+	      isCommon = true,
+	      isLarge = isCommon && length >= LARGE_ARRAY_SIZE,
+	      seen = isLarge ? createCache() : null,
+	      result = [];
+
+	  if (seen) {
+	    indexOf = cacheIndexOf;
+	    isCommon = false;
+	  } else {
+	    isLarge = false;
+	    seen = iteratee ? [] : result;
+	  }
+	  outer:
+	  while (++index < length) {
+	    var value = array[index],
+	        computed = iteratee ? iteratee(value, index, array) : value;
+
+	    if (isCommon && value === value) {
+	      var seenIndex = seen.length;
+	      while (seenIndex--) {
+	        if (seen[seenIndex] === computed) {
+	          continue outer;
+	        }
+	      }
+	      if (iteratee) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    }
+	    else if (indexOf(seen, computed, 0) < 0) {
+	      if (iteratee || isLarge) {
+	        seen.push(computed);
+	      }
+	      result.push(value);
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = baseUniq;
+
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var indexOfNaN = __webpack_require__(316);
+
+	/**
+	 * The base implementation of `_.indexOf` without support for binary searches.
+	 *
+	 * @private
+	 * @param {Array} array The array to search.
+	 * @param {*} value The value to search for.
+	 * @param {number} fromIndex The index to search from.
+	 * @returns {number} Returns the index of the matched value, else `-1`.
+	 */
+	function baseIndexOf(array, value, fromIndex) {
+	  if (value !== value) {
+	    return indexOfNaN(array, fromIndex);
+	  }
+	  var index = fromIndex - 1,
+	      length = array.length;
+
+	  while (++index < length) {
+	    if (array[index] === value) {
+	      return index;
+	    }
+	  }
+	  return -1;
+	}
+
+	module.exports = baseIndexOf;
+
+
+/***/ },
+/* 316 */
+/***/ function(module, exports) {
+
+	/**
+	 * Gets the index at which the first occurrence of `NaN` is found in `array`.
+	 *
+	 * @private
+	 * @param {Array} array The array to search.
+	 * @param {number} fromIndex The index to search from.
+	 * @param {boolean} [fromRight] Specify iterating from right to left.
+	 * @returns {number} Returns the index of the matched `NaN`, else `-1`.
+	 */
+	function indexOfNaN(array, fromIndex, fromRight) {
+	  var length = array.length,
+	      index = fromIndex + (fromRight ? 0 : -1);
+
+	  while ((fromRight ? index-- : ++index < length)) {
+	    var other = array[index];
+	    if (other !== other) {
+	      return index;
+	    }
+	  }
+	  return -1;
+	}
+
+	module.exports = indexOfNaN;
+
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(248);
+
+	/**
+	 * Checks if `value` is in `cache` mimicking the return signature of
+	 * `_.indexOf` by returning `0` if the value is found, else `-1`.
+	 *
+	 * @private
+	 * @param {Object} cache The cache to search.
+	 * @param {*} value The value to search for.
+	 * @returns {number} Returns `0` if `value` is found, else `-1`.
+	 */
+	function cacheIndexOf(cache, value) {
+	  var data = cache.data,
+	      result = (typeof value == 'string' || isObject(value)) ? data.set.has(value) : data.hash[value];
+
+	  return result ? 0 : -1;
+	}
+
+	module.exports = cacheIndexOf;
+
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var SetCache = __webpack_require__(319),
+	    getNative = __webpack_require__(245);
+
+	/** Native method references. */
+	var Set = getNative(global, 'Set');
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeCreate = getNative(Object, 'create');
+
+	/**
+	 * Creates a `Set` cache object to optimize linear searches of large arrays.
+	 *
+	 * @private
+	 * @param {Array} [values] The values to cache.
+	 * @returns {null|Object} Returns the new cache object if `Set` is supported, else `null`.
+	 */
+	function createCache(values) {
+	  return (nativeCreate && Set) ? new SetCache(values) : null;
+	}
+
+	module.exports = createCache;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var cachePush = __webpack_require__(320),
+	    getNative = __webpack_require__(245);
+
+	/** Native method references. */
+	var Set = getNative(global, 'Set');
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeCreate = getNative(Object, 'create');
+
+	/**
+	 *
+	 * Creates a cache object to store unique values.
+	 *
+	 * @private
+	 * @param {Array} [values] The values to cache.
+	 */
+	function SetCache(values) {
+	  var length = values ? values.length : 0;
+
+	  this.data = { 'hash': nativeCreate(null), 'set': new Set };
+	  while (length--) {
+	    this.push(values[length]);
+	  }
+	}
+
+	// Add functions to the `Set` cache.
+	SetCache.prototype.push = cachePush;
+
+	module.exports = SetCache;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(248);
+
+	/**
+	 * Adds `value` to the cache.
+	 *
+	 * @private
+	 * @name push
+	 * @memberOf SetCache
+	 * @param {*} value The value to cache.
+	 */
+	function cachePush(value) {
+	  var data = this.data;
+	  if (typeof value == 'string' || isObject(value)) {
+	    data.set.add(value);
+	  } else {
+	    data.hash[value] = true;
+	  }
+	}
+
+	module.exports = cachePush;
+
+
+/***/ },
+/* 321 */
+/***/ function(module, exports) {
+
+	/**
+	 * An implementation of `_.uniq` optimized for sorted arrays without support
+	 * for callback shorthands and `this` binding.
+	 *
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {Function} [iteratee] The function invoked per iteration.
+	 * @returns {Array} Returns the new duplicate free array.
+	 */
+	function sortedUniq(array, iteratee) {
+	  var seen,
+	      index = -1,
+	      length = array.length,
+	      resIndex = -1,
+	      result = [];
+
+	  while (++index < length) {
+	    var value = array[index],
+	        computed = iteratee ? iteratee(value, index, array) : value;
+
+	    if (!index || seen !== computed) {
+	      seen = computed;
+	      result[++resIndex] = value;
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = sortedUniq;
+
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _sketchfabJs = __webpack_require__(208);
+
+	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
+
+	var _BrowseMixin = __webpack_require__(279);
+
+	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
+
+	var _ = {
+	    uniq: __webpack_require__(313)
+	};
+
+	var Popular = _react2['default'].createClass({
+	    displayName: 'Popular',
+
+	    mixins: [_BrowseMixin2['default']],
+
+	    fetchData: function fetchData() {
+	        var _this = this;
+
+	        _sketchfabJs2['default'].Models.popular(this.state.offset).then(function (response) {
+
+	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
+
+	            _this.setState({
+	                models: models,
+	                offset: models.length,
+	                isLoading: false
+	            });
+	        });
+	    }
+	});
+
+	module.exports = Popular;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _sketchfabJs = __webpack_require__(208);
+
+	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
+
+	var _BrowseMixin = __webpack_require__(279);
+
+	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
+
+	var _ = {
+	    uniq: __webpack_require__(313)
+	};
+
+	var Recent = _react2['default'].createClass({
+	    displayName: 'Recent',
+
+	    mixins: [_BrowseMixin2['default']],
+
+	    fetchData: function fetchData() {
+	        var _this = this;
+
+	        _sketchfabJs2['default'].Models.recent(this.state.offset).then(function (response) {
+	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
+
+	            _this.setState({
+	                models: models,
+	                offset: models.length,
+	                isLoading: false
+	            });
+	        });
+	    }
+	});
+
+	module.exports = Recent;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _sketchfabJs = __webpack_require__(208);
+
+	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
+
+	var _BrowseMixin = __webpack_require__(279);
+
+	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
+
+	var _ = {
+	    uniq: __webpack_require__(313)
+	};
+
+	var Search = _react2['default'].createClass({
+	    displayName: 'Search',
+
+	    mixins: [_BrowseMixin2['default']],
+
+	    fetchData: function fetchData() {
+	        var _this = this;
+
+	        _sketchfabJs2['default'].Models.search(this.props.location.query.q, this.state.offset).then(function (response) {
+
+	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
+
+	            _this.setState({
+	                models: models,
+	                offset: models.length,
+	                isLoading: false
+	            });
+	        });
+	    }
+	});
+
+	module.exports = Search;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _sketchfabJs = __webpack_require__(208);
+
+	var _sketchfabJs2 = _interopRequireDefault(_sketchfabJs);
+
+	var _BrowseMixin = __webpack_require__(279);
+
+	var _BrowseMixin2 = _interopRequireDefault(_BrowseMixin);
+
+	var _ = {
+	    uniq: __webpack_require__(313)
+	};
+
+	var Category = _react2['default'].createClass({
+	    displayName: 'Category',
+
+	    mixins: [_BrowseMixin2['default']],
+
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        if (this.props.params.category !== nextProps.params.category) {
+	            this.setState({
+	                models: [],
+	                offset: 0,
+	                isLoading: true
+	            });
+	            this.fetchData();
+	        }
+	    },
+
+	    fetchData: function fetchData() {
+	        var _this = this;
+
+	        _sketchfabJs2['default'].Models.byCategory(this.props.params.category, this.state.offset).then(function (response) {
+
+	            var models = _.uniq(_this.state.models.concat(response.results), false, 'uid');
+
+	            _this.setState({
+	                models: models,
+	                offset: models.length,
+	                isLoading: false
+	            });
+	        });
+	    }
+	});
+
+	module.exports = Category;
 
 /***/ }
 /******/ ]);

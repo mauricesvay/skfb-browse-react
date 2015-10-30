@@ -9,7 +9,7 @@ let Search = React.createClass({
     mixins: [BrowseMixin],
 
     fetchData() {
-        Sketchfab.Models.search(this.props.query.q, this.state.offset).then((response) => {
+        Sketchfab.Models.search(this.props.location.query.q, this.state.offset).then((response) => {
 
             var models = _.uniq(this.state.models.concat(response.results), false, 'uid');
 

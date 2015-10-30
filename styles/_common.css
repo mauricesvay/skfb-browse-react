@@ -139,6 +139,11 @@ a {
     }
 }
 
+.browse-grid {
+    height: 100%;
+    overflow: auto;
+}
+
 .modelcard {
     position: relative;
     background: #000;

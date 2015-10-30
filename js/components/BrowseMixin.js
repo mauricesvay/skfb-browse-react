@@ -20,12 +20,22 @@ let Browse = {
         this.fetchData();
     },
 
-    onLoadMoreClicked(e) {
-        e.preventDefault();
-        this.setState({
-            isLoading: true
-        });
-        this.fetchData();
+    // onLoadMoreClicked(e) {
+    //     e.preventDefault();
+    //     this.setState({
+    //         isLoading: true
+    //     });
+    //     this.fetchData();
+    // },
+
+    handleScroll(e) {
+        const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
+        if (lastVisibleIndex >= (this.state.models.length - 12)) {
+            this.setState({
+                isLoading: true
+            });
+            this.fetchData();
+        }
     },
 
     renderItem(index, key) {
@@ -33,27 +43,15 @@ let Browse = {
         return <Model key={model.urlid} model={model}></Model>
     },
 
-    renderLoadMore: function() {
-        if (this.state.isLoading) {
-            return <button onClick={this.onLoadMoreClicked} disabled="disabled">Loading</button>
-        } else {
-            return <button onClick={this.onLoadMoreClicked} onMouseOver={this.onLoadMoreClicked}>Load more</button>
-        }
-    },
-
     render() {
-        console.log(this.state.models.length + ' items');
         return (
-            <div>
+            <div className="browse-grid" onScroll={this.handleScroll}>
                 <ReactList
                     ref="list"
                     itemRenderer={this.renderItem}
                     length={this.state.models.length}
                     type="uniform"
                 />
-                <div style={{padding: '10px', clear: 'both', textAlign: 'center'}}>
-                    {this.renderLoadMore()}
-                </div>
             </div>
         )
     }

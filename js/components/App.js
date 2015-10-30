@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, RouteHandler } from 'react-router';
-import { Navigation } from 'react-router';
+import { History } from 'react-router';
 import Sidebar from './Sidebar';
 import Sketchfab from 'sketchfab-js';
 require('script!localforage'); // window.localforage
@@ -12,7 +12,7 @@ Sketchfab.init({
 
 let App = React.createClass({
 
-    mixins: [Navigation],
+    mixins: [History],
 
     getInitialState() {
 
@@ -42,7 +42,7 @@ let App = React.createClass({
 
     onSearch(e) {
         e.preventDefault();
-        this.transitionTo('/search?q=' + this.state.q);
+        this.history.pushState(null, '/search', {q: this.state.q});
     },
 
     onSearchChange(e) {
