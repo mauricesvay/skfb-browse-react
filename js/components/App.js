@@ -117,7 +117,7 @@ let App = React.createClass({
                 <div className="main">
                     <Sidebar loginComponent={this.renderLogin()}/>
                     <div className="content">
-                        <RouteHandler/>
+                        {this.props.children}
                     </div>
                 </div>
             </div>
