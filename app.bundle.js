@@ -24270,7 +24270,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/staffpicks' },
+	                            { activeClassName: 'active', to: '/staffpicks' },
 	                            _react2['default'].createElement('i', { className: 'icon ion-ios-heart' }),
 	                            ' Staffpicks'
 	                        )
@@ -24280,7 +24280,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/popular' },
+	                            { activeClassName: 'active', to: '/popular' },
 	                            _react2['default'].createElement('i', { className: 'icon ion-connection-bars' }),
 	                            ' Popular'
 	                        )
@@ -24290,7 +24290,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/recent' },
+	                            { activeClassName: 'active', to: '/recent' },
 	                            _react2['default'].createElement('i', { className: 'icon ion-ios-clock' }),
 	                            ' Recent'
 	                        )
@@ -24313,7 +24313,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/71260eecdab14a92859a1630e69b5e59' },
+	                            { activeClassName: 'active', to: '/category/71260eecdab14a92859a1630e69b5e59' },
 	                            '3D Scans'
 	                        )
 	                    ),
@@ -24322,7 +24322,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/7b69e7e004ab4e468fa11350a9e9dbb4' },
+	                            { activeClassName: 'active', to: '/category/7b69e7e004ab4e468fa11350a9e9dbb4' },
 	                            'Animal'
 	                        )
 	                    ),
@@ -24331,7 +24331,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/7c8e6d2ef6e34acfafb4dfdd2eac8e9a' },
+	                            { activeClassName: 'active', to: '/category/7c8e6d2ef6e34acfafb4dfdd2eac8e9a' },
 	                            'Architecture'
 	                        )
 	                    ),
@@ -24340,7 +24340,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/c92452986e70422ca2c6552835a89882' },
+	                            { activeClassName: 'active', to: '/category/c92452986e70422ca2c6552835a89882' },
 	                            'Characters'
 	                        )
 	                    ),
@@ -24349,7 +24349,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/232cf6b0e479418fb9845165ea855ff7' },
+	                            { activeClassName: 'active', to: '/category/232cf6b0e479418fb9845165ea855ff7' },
 	                            'Games'
 	                        )
 	                    ),
@@ -24358,7 +24358,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/528c1d6ede944cf685b2b36eb595f26d' },
+	                            { activeClassName: 'active', to: '/category/528c1d6ede944cf685b2b36eb595f26d' },
 	                            'Miscellaneous'
 	                        )
 	                    ),
@@ -24367,7 +24367,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/dccdb5378e924075aaee17288b6b2df1' },
+	                            { activeClassName: 'active', to: '/category/dccdb5378e924075aaee17288b6b2df1' },
 	                            'Objects'
 	                        )
 	                    ),
@@ -24376,7 +24376,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/277778eda2ec467cb6e028b85682ffd3' },
+	                            { activeClassName: 'active', to: '/category/277778eda2ec467cb6e028b85682ffd3' },
 	                            'Printable'
 	                        )
 	                    ),
@@ -24385,7 +24385,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/04b6d4d0e43c403f8f226c374b5381ea' },
+	                            { activeClassName: 'active', to: '/category/04b6d4d0e43c403f8f226c374b5381ea' },
 	                            'Scenes'
 	                        )
 	                    ),
@@ -24394,7 +24394,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/e4a6ff21ea0042ff9f0f64db2d0adaec' },
+	                            { activeClassName: 'active', to: '/category/e4a6ff21ea0042ff9f0f64db2d0adaec' },
 	                            'Science'
 	                        )
 	                    ),
@@ -24403,7 +24403,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/dbe6cb768f2d4b31ba1611d3229d7431' },
+	                            { activeClassName: 'active', to: '/category/dbe6cb768f2d4b31ba1611d3229d7431' },
 	                            'Vegetal'
 	                        )
 	                    ),
@@ -24412,7 +24412,7 @@
 	                        { className: 'item' },
 	                        _react2['default'].createElement(
 	                            _reactRouter.Link,
-	                            { to: '/category/cf442dbc806b432d9e13f4dc3b1df0c0' },
+	                            { activeClassName: 'active', to: '/category/cf442dbc806b432d9e13f4dc3b1df0c0' },
 	                            'Vehicles'
 	                        )
 	                    )
@@ -29470,7 +29470,7 @@
 	        } else {
 	            return _react2['default'].createElement(
 	                'button',
-	                { onClick: this.onLoadMoreClicked },
+	                { onClick: this.onLoadMoreClicked, onMouseOver: this.onLoadMoreClicked },
 	                'Load more'
 	            );
 	        }

@@ -37,7 +37,7 @@ let Browse = {
         if (this.state.isLoading) {
             return <button onClick={this.onLoadMoreClicked} disabled="disabled">Loading</button>
         } else {
-            return <button onClick={this.onLoadMoreClicked}>Load more</button>
+            return <button onClick={this.onLoadMoreClicked} onMouseOver={this.onLoadMoreClicked}>Load more</button>
         }
     },
 
