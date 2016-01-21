@@ -3,8 +3,21 @@ import BrowseMixin from './BrowseMixin';
 import sketchfabSDK from '../lib/sketchfab.js';
 
 let Search = React.createClass({
-    
+
     mixins: [BrowseMixin],
+
+    componentWillReceiveProps( nextProps ) {
+        this.setState({
+            models: [],
+            offset: 0,
+        });
+    },
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.location.query.q != prevProps.location.query.q) {
+            this.getData();
+        }
+    },
 
     getStorageKey() {
         return 'browse/search/' + this.props.location.query.q;

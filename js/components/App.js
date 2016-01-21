@@ -67,7 +67,7 @@ let App = React.createClass({
 
     onSearch(e) {
         e.preventDefault();
-        this.context.router.pushState('/search', {q: this.state.q});
+        this.context.router.push({pathname:'/search', query:{q: this.state.q}});
     },
 
     onSearchChange(e) {
