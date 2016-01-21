@@ -18,7 +18,7 @@ let Browse = {
             models: [],
             offset: 0,
             isLoading: false,
-            category: null
+            category: this.props.params.category
         }
     },
 

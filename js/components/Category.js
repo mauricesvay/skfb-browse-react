@@ -25,7 +25,9 @@ let Category = React.createClass({
     },
 
     fetchData() {
-        sketchfabSDK.Models.byCategory(this.state.category, this.state.offset).then(this.onDataSuccess);
+        if (this.state.category) {
+            sketchfabSDK.Models.byCategory(this.state.category, this.state.offset).then(this.onDataSuccess);
+        }
     },
 });
 
