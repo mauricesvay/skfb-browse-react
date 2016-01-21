@@ -1,24 +1,17 @@
 import React from 'react';
-import Sketchfab from 'sketchfab-js';
 import BrowseMixin from './BrowseMixin';
-var _ = {
-    uniq: require('lodash/array/uniq')
-};
+import sketchfabSDK from '../lib/sketchfab.js';
 
 let Search = React.createClass({
+    
     mixins: [BrowseMixin],
 
+    getStorageKey() {
+        return 'browse/search/' + this.props.location.query.q;
+    },
+
     fetchData() {
-        Sketchfab.Models.search(this.props.location.query.q, this.state.offset).then((response) => {
-
-            var models = _.uniq(this.state.models.concat(response.results), false, 'uid');
-
-            this.setState({
-                models: models,
-                offset: models.length,
-                isLoading: false
-            });
-        });
+        sketchfabSDK.Models.search(this.props.location.query.q, this.state.offset).then(this.onDataSuccess);
     },
 });
 

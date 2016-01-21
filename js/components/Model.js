@@ -1,6 +1,6 @@
 var React = require('react');
 var _ = {
-    sortBy: require('lodash/collection/sortBy')
+    sortBy: require('lodash/sortBy')
 }
 
 var Model = React.createClass({

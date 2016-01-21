@@ -1,21 +1,38 @@
 import React from 'react';
 import { Link, RouteHandler } from 'react-router';
-import { History } from 'react-router';
 import Sidebar from './Sidebar';
-import Sketchfab from 'sketchfab-js';
-require('script!localforage'); // window.localforage
+import sketchfabSDK from '../lib/sketchfab.js';
+import localforage from 'localforage';
 
-Sketchfab.init({
-    client_id: 'ig-3miFgAznsYmxUP9VGoN@Chj7ZIrUfAG!UWwne',
-    redirect_uri: 'http://localhost:8000/authSuccess.html',
-});
+const Modal = React.createClass({
+  styles: {
+    position: 'fixed',
+    top: '20%',
+    right: '20%',
+    bottom: '20%',
+    left: '20%',
+    padding: 20,
+    boxShadow: '0px 0px 150px 130px rgba(0, 0, 0, 0.5)',
+    overflow: 'auto',
+    background: '#fff'
+  },
+
+  render() {
+    return (
+      <div style={this.styles}>
+        {this.props.children}
+      </div>
+    )
+  }
+})
 
 let App = React.createClass({
 
-    mixins: [History],
+    contextTypes: {
+        router: React.PropTypes.object.isRequired
+    },
 
     getInitialState() {
-
         return {
             q: '',
             accessToken: null,
@@ -40,9 +57,17 @@ let App = React.createClass({
         });
     },
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.location.key !== this.props.location.key) {
+            if (nextProps.location.state && nextProps.location.state.modal) {
+                this.previousChildren = this.props.children;
+            }
+        }
+    },
+
     onSearch(e) {
         e.preventDefault();
-        this.history.pushState(null, '/search', {q: this.state.q});
+        this.context.router.pushState('/search', {q: this.state.q});
     },
 
     onSearchChange(e) {
@@ -55,13 +80,13 @@ let App = React.createClass({
     onLoginClick(e) {
 
         if (this.state.accessToken === null) {
-            Sketchfab.connect()
+            sketchfabSDK.connect()
                 .then((token) => {
                     this.setState({
                         accessToken: token
                     });
                     localforage.setItem('accessToken', token);
-                    return Sketchfab.Users.me(token);
+                    return sketchfabSDK.Users.me(token);
                 })
                 .then((response) => {
                     this.setState({
@@ -91,6 +116,15 @@ let App = React.createClass({
     },
 
     render() {
+
+        let { location } = this.props;
+
+        let isModal = (
+            location.state &&
+            location.state.modal &&
+            this.previousChildren
+        );
+
         return (
             <div className="app">
                 <header className="header">
@@ -117,7 +151,15 @@ let App = React.createClass({
                 <div className="main">
                     <Sidebar loginComponent={this.renderLogin()}/>
                     <div className="content">
-                        {this.props.children}
+                        {isModal ?
+                            this.previousChildren :
+                            this.props.children
+                        }
+                        {isModal && (
+                            <Modal isOpen={true}>
+                                    {this.props.children}
+                            </Modal>
+                        )}
                     </div>
                 </div>
             </div>

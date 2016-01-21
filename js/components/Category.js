@@ -1,35 +1,31 @@
 import React from 'react';
-import Sketchfab from 'sketchfab-js';
 import BrowseMixin from './BrowseMixin';
-var _ = {
-    uniq: require('lodash/array/uniq')
-};
+import sketchfabSDK from '../lib/sketchfab.js';
 
 let Category = React.createClass({
+
     mixins: [BrowseMixin],
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.params.category !== nextProps.params.category) {
-            this.setState({
-                models: [],
-                offset: 0,
-                isLoading: true
-            });
-            this.fetchData();
+    componentWillReceiveProps( nextProps ) {
+        this.setState({
+            models: [],
+            offset: 0,
+            category: nextProps.params.category
+        });
+    },
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.category != prevState.category) {
+            this.getData();
         }
     },
 
+    getStorageKey() {
+        return 'browse/category/' + this.state.category;
+    },
+
     fetchData() {
-        Sketchfab.Models.byCategory(this.props.params.category, this.state.offset).then((response) => {
-
-            var models = _.uniq(this.state.models.concat(response.results), false, 'uid');
-
-            this.setState({
-                models: models,
-                offset: models.length,
-                isLoading: false
-            });
-        });
+        sketchfabSDK.Models.byCategory(this.state.category, this.state.offset).then(this.onDataSuccess);
     },
 });
 

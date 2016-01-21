@@ -1,32 +1,62 @@
 import React from 'react';
 import Grid from './Grid';
 import ReactList from 'react-list';
+import { History } from 'react-router';
 var Model = require('./Model');
+var _ = {
+    uniqBy: require('lodash/uniqBy')
+};
 
 let Browse = {
+
+    contextTypes: {
+        router: React.PropTypes.object.isRequired
+    },
 
     getInitialState() {
         return {
             models: [],
             offset: 0,
-            isLoading: false
+            isLoading: false,
+            category: null
         }
     },
 
     componentDidMount() {
+        this.getData();
+    },
+
+    getData() {
+
+        if (this.state.isLoading === true) {
+            return;
+        }
+
         this.setState({
             isLoading: true
         });
+
         this.fetchData();
     },
 
-    // onLoadMoreClicked(e) {
-    //     e.preventDefault();
-    //     this.setState({
-    //         isLoading: true
-    //     });
-    //     this.fetchData();
-    // },
+    onDataSuccess( response ) {
+
+        if (this.isMounted()) {
+
+            var models = _.uniqBy(
+                this.state.models.concat(response.results),
+                (model) => { return model.urlid; }
+            );
+
+            this.setState({
+                models: models,
+                offset: models.length,
+                isLoading: false
+            });
+
+        }
+
+    },
 
     handleScroll(e) {
         const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
@@ -34,13 +64,19 @@ let Browse = {
             this.setState({
                 isLoading: true
             });
-            this.fetchData();
+            this.getData();
         }
+    },
+
+    handleModelClick(e) {
+        e.preventDefault();
+        var id = e.currentTarget.getAttribute('data-uid');
+        this.context.router.push({pathname:'/model/' + id, state:{modal: true}});
     },
 
     renderItem(index, key) {
         var model = this.state.models[index];
-        return <Model key={model.urlid} model={model}></Model>
+        return <Model key={model.urlid} model={model} clickHandler={this.handleModelClick}></Model>
     },
 
     render() {

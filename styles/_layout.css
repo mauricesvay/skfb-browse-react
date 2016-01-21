@@ -42,6 +42,15 @@ body,
     overflow: auto;
 }
 
+
+.modelDetail,
+.modelDetail iframe {
+    display: block;
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .popup-container,
 .popup-overlay {
     position: absolute;
