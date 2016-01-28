@@ -17,7 +17,7 @@ let Browse = {
             offset: 0,
             isLoading: false,
             category: this.props.params.category
-        }
+        };
     },
 
     componentDidMount() {
@@ -56,7 +56,7 @@ let Browse = {
 
     },
 
-    handleScroll(e) {
+    handleScroll(/*e*/) {
         const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
         if (lastVisibleIndex >= (this.state.models.length - 12)) {
             this.setState({
@@ -72,9 +72,9 @@ let Browse = {
         this.context.router.push({pathname:'/model/' + id, state:{modal: true}});
     },
 
-    renderItem(index, key) {
+    renderItem(index/*, key*/) {
         var model = this.state.models[index];
-        return <Model key={model.urlid} model={model} clickHandler={this.handleModelClick}></Model>
+        return (<Model key={model.urlid} model={model} clickHandler={this.handleModelClick}></Model>);
     },
 
     render() {
@@ -87,7 +87,7 @@ let Browse = {
                     type="uniform"
                 />
             </div>
-        )
+        );
     }
 
 };

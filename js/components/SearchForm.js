@@ -20,7 +20,7 @@ var SearchForm = React.createClass({
     onSearchChange(e) {
         this.setState({q: e.target.value});
         if (e.target.value.indexOf('#') === 0) {
-            console.log('Tag search');
+            //console.log('Tag search');
         }
     },
 

@@ -13,7 +13,7 @@ let Staffpicks = React.createClass({
 
     fetchData() {
         sketchfabSDK.Models.staffpicks(this.state.offset).then(this.onDataSuccess);
-    },
+    }
 
 });
 

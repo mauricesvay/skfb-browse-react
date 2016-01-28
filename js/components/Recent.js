@@ -3,7 +3,7 @@ import BrowseMixin from './BrowseMixin';
 import sketchfabSDK from '../lib/sketchfab.js';
 
 let Recent = React.createClass({
-    
+
     mixins: [BrowseMixin],
 
     getStorageKey() {
@@ -12,7 +12,7 @@ let Recent = React.createClass({
 
     fetchData() {
         sketchfabSDK.Models.recent(this.state.offset).then(this.onDataSuccess);
-    },
+    }
 });
 
 module.exports = Recent;

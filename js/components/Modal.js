@@ -9,7 +9,7 @@ const Modal = React.createClass({
                     { this.props.children }
                 </div>
             </div>
-        )
+        );
     }
 });
 

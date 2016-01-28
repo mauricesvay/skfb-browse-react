@@ -3,7 +3,7 @@ import BrowseMixin from './BrowseMixin';
 import sketchfabSDK from '../lib/sketchfab.js';
 
 let Popular = React.createClass({
-    
+
     mixins: [BrowseMixin],
 
     getStorageKey() {
@@ -12,7 +12,7 @@ let Popular = React.createClass({
 
     fetchData() {
         sketchfabSDK.Models.popular(this.state.offset).then(this.onDataSuccess);
-    },
+    }
 });
 
 module.exports = Popular;

@@ -39,7 +39,7 @@ let Sidebar = React.createClass({
                     </ul>
                 </div>
             </div>
-        )
+        );
     }
 });
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link, RouteHandler } from 'react-router';
-import Sidebar from './Sidebar';
+import { Link } from 'react-router';
 import sketchfabSDK from '../lib/sketchfab.js';
 import localforage from 'localforage';
+
+import Sidebar from './Sidebar';
 import Modal from './Modal';
 import SearchForm from './SearchForm';
 
@@ -54,7 +55,7 @@ let App = React.createClass({
         }
     },
 
-    onLoginClick(e) {
+    onLoginClick() {
 
         if (this.state.accessToken === null) {
             sketchfabSDK.connect()
@@ -70,10 +71,10 @@ let App = React.createClass({
                         authUser: response
                     });
                     localforage.setItem('user', response);
-                    console.log(this.state);
+                    // console.log(this.state);
                 })
-                .catch((error) => {
-                    console.error('Error while logging in', error);
+                .catch((/*error*/) => {
+                    // console.error('Error while logging in', error);
                 });
         }
 
@@ -88,7 +89,7 @@ let App = React.createClass({
                 </span>
             );
         } else {
-            return <a href="#" onClick={this.onLoginClick}>Login</a>
+            return (<a href="#" onClick={this.onLoginClick}>Login</a>);
         }
     },
 
@@ -129,7 +130,7 @@ let App = React.createClass({
                     </div>
                 </div>
                 {isModal && (
-                    <Modal isOpen={true} onExit={()=>{this.context.router.goBack()}}>
+                    <Modal isOpen={true} onExit={()=>{this.context.router.goBack();}}>
                             {this.props.children}
                     </Modal>
                 )}

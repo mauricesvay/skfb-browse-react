@@ -6,14 +6,14 @@ let ModelDetail = React.createClass({
     getInitialState() {
         return {
             url: 'about:blank'
-        }
+        };
     },
 
     componentWillMount() {
         sketchfabSDK.Model.byId(this.props.params.id).then((response) => {
             this.setState({
                 url: response.embedUrl + '?autostart=1'
-            })
+            });
         });
     },
 

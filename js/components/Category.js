@@ -28,7 +28,7 @@ let Category = React.createClass({
         if (this.state.category) {
             sketchfabSDK.Models.byCategory(this.state.category, this.state.offset).then(this.onDataSuccess);
         }
-    },
+    }
 });
 
 module.exports = Category;
