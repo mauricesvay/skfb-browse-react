@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactList from 'react-list';
-import { History } from 'react-router';
 var Model = require('./Model');
 var _ = {
     uniqBy: require('lodash/uniqBy')
