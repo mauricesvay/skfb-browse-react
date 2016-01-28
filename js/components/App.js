@@ -3,28 +3,7 @@ import { Link, RouteHandler } from 'react-router';
 import Sidebar from './Sidebar';
 import sketchfabSDK from '../lib/sketchfab.js';
 import localforage from 'localforage';
-
-const Modal = React.createClass({
-  styles: {
-    position: 'fixed',
-    top: '20%',
-    right: '20%',
-    bottom: '20%',
-    left: '20%',
-    padding: 20,
-    boxShadow: '0px 0px 150px 130px rgba(0, 0, 0, 0.5)',
-    overflow: 'auto',
-    background: '#fff'
-  },
-
-  render() {
-    return (
-      <div style={this.styles}>
-        {this.props.children}
-      </div>
-    )
-  }
-})
+import Modal from './Modal';
 
 let App = React.createClass({
 
@@ -155,13 +134,13 @@ let App = React.createClass({
                             this.previousChildren :
                             this.props.children
                         }
-                        {isModal && (
-                            <Modal isOpen={true}>
-                                    {this.props.children}
-                            </Modal>
-                        )}
                     </div>
                 </div>
+                {isModal && (
+                    <Modal isOpen={true} onExit={()=>{this.context.router.goBack()}}>
+                            {this.props.children}
+                    </Modal>
+                )}
             </div>
         );
     }

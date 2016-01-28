@@ -13,9 +13,16 @@ var Grid = React.createClass({
 
     render: function() {
 
-        var items = this.props.models.map(function(model){
-            return <Model key={model.urlid} model={model} mouseOverHandler={this.props.mouseOverHandler} clickHandler={this.props.clickHandler}></Model>
-        }.bind(this));
+        var items = this.props.models.map((model) => {
+            return (
+                <Model
+                    key={model.urlid}
+                    model={model}
+                    mouseOverHandler={this.props.mouseOverHandler}
+                    clickHandler={this.props.clickHandler}
+                ></Model>
+            );
+        });
 
         return (
             <div>
