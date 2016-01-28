@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from './Grid';
 import ReactList from 'react-list';
 import { History } from 'react-router';
 var Model = require('./Model');
