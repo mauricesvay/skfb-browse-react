@@ -1,18 +1,28 @@
-import React from 'react';
-import BrowseMixin from './BrowseMixin';
-import sketchfabSDK from '../lib/sketchfab.js';
+import { connect } from 'react-redux';
+import {requestModels} from '../actions/actions';
+import Grid from './Grid';
 
-let Recent = React.createClass({
+var query = {};
+var key = JSON.stringify(query);
 
-    mixins: [BrowseMixin],
+function mapStateToProps(state) {
+    var models = state.models[key] || [];
+    var isLoading = !!state.isLoading[key];
 
-    getStorageKey() {
-        return 'browse/recents';
-    },
+    return {
+        models,
+        isLoading
+    };
+}
 
-    fetchData() {
-        sketchfabSDK.Models.recent(this.state.offset).then(this.onDataSuccess);
+function mapDispatchToProps(dispatch) {
+    return {
+        requestModels: (offset) => {
+            dispatch(requestModels(query, offset))
+        }
     }
-});
+}
 
-module.exports = Recent;
+const RecentGrid = connect(mapStateToProps, mapDispatchToProps)(Grid);
+
+module.exports = RecentGrid;

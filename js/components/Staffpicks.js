@@ -1,20 +1,28 @@
-import React from 'react';
+import { connect } from 'react-redux';
+import {requestModels} from '../actions/actions';
+import Grid from './Grid';
 
-import BrowseMixin from './BrowseMixin';
-import sketchfabSDK from '../lib/sketchfab.js';
+var query = {'flag':'staffpicked'};
+var key = JSON.stringify(query);
 
-let Staffpicks = React.createClass({
+function mapStateToProps(state) {
+    var models = state.models[key] || [];
+    var isLoading = !!state.isLoading[key];
 
-    mixins: [BrowseMixin],
+    return {
+        models,
+        isLoading
+    };
+}
 
-    getStorageKey() {
-        return 'browse/staffpicks';
-    },
-
-    fetchData() {
-        sketchfabSDK.Models.staffpicks(this.state.offset).then(this.onDataSuccess);
+function mapDispatchToProps(dispatch) {
+    return {
+        requestModels: (offset) => {
+            dispatch(requestModels(query, offset))
+        }
     }
+}
 
-});
+const RecentGrid = connect(mapStateToProps, mapDispatchToProps)(Grid);
 
-module.exports = Staffpicks;
+module.exports = RecentGrid;

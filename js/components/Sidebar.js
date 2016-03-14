@@ -5,13 +5,6 @@ let Sidebar = React.createClass({
     render() {
         return (
             <div className="sidebar">
-                {/*
-                <div className="navigation-login section animated fadeInLeft">
-                    <ul className="sidebar-menu">
-                        <li className="item">{this.props.loginComponent}</li>
-                    </ul>
-                </div>
-                */}
                 <div className="navigation-main section animated fadeInLeft">
                     <ul className="sidebar-menu">
                         <li className="item"><Link activeClassName="active" to="/staffpicks"><i className="icon ion-ios-heart"></i> Staffpicks</Link></li>

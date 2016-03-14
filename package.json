@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "stats": "webpack --json > app.json && analyze-bundle-size app.json"
+    "stats": "webpack --json > app.json && analyze-bundle-size app.json",
+    "build-prod": "webpack -p"
   },
   "author": "",
   "license": "ISC",
@@ -16,8 +17,11 @@
     "react": "^0.14.6",
     "react-dom": "^0.14.1",
     "react-list": "^0.7.13",
+    "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
-    "react-router-redux": "^4.0.0"
+    "react-router-redux": "^4.0.0",
+    "redux": "^3.3.1",
+    "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
     "babel-core": "^5.8.23",

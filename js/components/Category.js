@@ -1,34 +1,28 @@
-import React from 'react';
-import BrowseMixin from './BrowseMixin';
-import sketchfabSDK from '../lib/sketchfab.js';
+import { connect } from 'react-redux';
+import {requestModels} from '../actions/actions';
+import Grid from './Grid';
 
-let Category = React.createClass({
+function mapStateToProps(state, ownProps) {
+    var query = {categories: ownProps.params.category};
+    var key = JSON.stringify(query);
+    var models = state.models[key] || [];
+    var isLoading = !!state.isLoading[key];
 
-    mixins: [BrowseMixin],
+    return {
+        models,
+        isLoading
+    };
+}
 
-    componentWillReceiveProps( nextProps ) {
-        this.setState({
-            models: [],
-            offset: 0,
-            category: nextProps.params.category
-        });
-    },
-
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.category != prevState.category) {
-            this.getData();
-        }
-    },
-
-    getStorageKey() {
-        return 'browse/category/' + this.state.category;
-    },
-
-    fetchData() {
-        if (this.state.category) {
-            sketchfabSDK.Models.byCategory(this.state.category, this.state.offset).then(this.onDataSuccess);
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        requestModels: (offset) => {
+            var query = {categories: ownProps.params.category};
+            dispatch(requestModels(query, offset))
         }
     }
-});
+}
 
-module.exports = Category;
+const RecentGrid = connect(mapStateToProps, mapDispatchToProps)(Grid);
+
+module.exports = RecentGrid;

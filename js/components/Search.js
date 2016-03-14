@@ -1,31 +1,28 @@
-import React from 'react';
-import BrowseMixin from './BrowseMixin';
-import sketchfabSDK from '../lib/sketchfab.js';
+import { connect } from 'react-redux';
+import {requestModels} from '../actions/actions';
+import Grid from './Grid';
 
-let Search = React.createClass({
+function mapStateToProps(state, ownProps) {
+    var query = {search: ownProps.location.query.q};
+    var key = JSON.stringify(query);
+    var models = state.models[key] || [];
+    var isLoading = !!state.isLoading[key];
 
-    mixins: [BrowseMixin],
+    return {
+        models,
+        isLoading
+    };
+}
 
-    componentWillReceiveProps( /*nextProps*/ ) {
-        this.setState({
-            models: [],
-            offset: 0
-        });
-    },
-
-    componentDidUpdate(prevProps/*, prevState*/) {
-        if (this.props.location.query.q != prevProps.location.query.q) {
-            this.getData();
+function mapDispatchToProps(dispatch, ownProps) {
+    var query = {search: ownProps.location.query.q};
+    return {
+        requestModels: (offset) => {
+            dispatch(requestModels(query, offset))
         }
-    },
-
-    getStorageKey() {
-        return 'browse/search/' + this.props.location.query.q;
-    },
-
-    fetchData() {
-        sketchfabSDK.Models.search(this.props.location.query.q, this.state.offset).then(this.onDataSuccess);
     }
-});
+}
 
-module.exports = Search;
+const RecentGrid = connect(mapStateToProps, mapDispatchToProps)(Grid);
+
+module.exports = RecentGrid;
