@@ -1,10 +1,11 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: "./app.js",
     output: {
-        path: __dirname,
+        path: path.join(__dirname, 'dist'),
         filename: "app.bundle.js"
     },
     module: {

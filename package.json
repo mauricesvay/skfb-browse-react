@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "stats": "webpack --json > app.json && analyze-bundle-size app.json",
-    "build-prod": "webpack -p"
+    "stats": "webpack --json > app.json && analyze-bundle-size app.json"
   },
   "author": "",
   "license": "ISC",
