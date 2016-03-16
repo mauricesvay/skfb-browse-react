@@ -5,6 +5,7 @@ import sketchfabSDK from '../lib/sketchfab.js';
 import Sidebar from './Sidebar';
 import Modal from './Modal';
 import SearchForm from './SearchForm';
+import UserInfo from './UserInfoContainer';
 
 let App = React.createClass({
 
@@ -48,12 +49,8 @@ let App = React.createClass({
                     </div>
                     <div className="toolbar">
                         <SearchForm></SearchForm>
-                    </div>
-                    <div className="filters">
-                        <div className="btn-group sort-by">
-                            <button className="btn btn-small" value="-likeCount">Liked</button>
-                            <button className="btn btn-small" value="-viewCount">Popular</button>
-                            <button className="btn btn-small active" value="-createdAt">Recent</button>
+                        <div className="userInfo">
+                            <UserInfo></UserInfo>
                         </div>
                     </div>
                 </header>

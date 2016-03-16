@@ -2,6 +2,7 @@ import React from 'react';
 import { hashHistory, Router, Route } from 'react-router';
 
 import App from '../components/App';
+import Newsfeed from '../components/Newsfeed';
 import Staffpicks from '../components/Staffpicks';
 import Popular from '../components/Popular';
 import Recent from '../components/Recent';
@@ -12,6 +13,7 @@ import ModelDetail from '../components/ModelDetail';
 module.exports = (
     <Router history={hashHistory}>
         <Route name="app" path="/" component={App}>
+            <Route name="newsfeed" path="/newsfeed" component={Newsfeed}/>
             <Route name="staffpicks" path="/staffpicks" component={Staffpicks}/>
             <Route name="popular" path="/popular" component={Popular}/>
             <Route name="recent" path="/recent" component={Recent}/>

@@ -1,5 +1,12 @@
 import { combineReducers } from 'redux';
-import { FETCH_MODELS_SUCCESS, FETCH_MODELS_ERROR, FETCH_MODELS_REQUEST } from '../actions/actions';
+import {
+    FETCH_MODELS_SUCCESS,
+    FETCH_MODELS_ERROR,
+    FETCH_MODELS_REQUEST,
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
+    LOGOUT
+} from '../actions/actions';
 var _ = {
     uniqBy: require('lodash/uniqBy')
 }
@@ -41,9 +48,33 @@ function loadingReducer(state = {}, action) {
     }
 }
 
+var defaultUserState = {
+    accessToken: ''
+}
+
+function userReducer(state=defaultUserState, action) {
+    switch (action.type) {
+        case LOGIN_SUCCESS:
+            return {
+                accessToken: action.accessToken
+            };
+        case LOGIN_ERROR:
+            console.log('Login error');
+            return state;
+        case LOGOUT:
+            cookie.remove('accessToken');
+            return {
+                accessToken: ''
+            };
+        default:
+            return state;
+    }
+}
+
 const MainReducer = combineReducers({
     models: modelsReducer,
-    isLoading: loadingReducer
+    isLoading: loadingReducer,
+    user: userReducer
 });
 
 module.exports = MainReducer;

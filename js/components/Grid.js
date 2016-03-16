@@ -33,8 +33,7 @@ let Grid = React.createClass({
         }
     },
 
-    handleScroll: _.throttle(function(e){
-
+    handleScroll: function(e){
         var isScrollingDown = (e.target.scrollTop - scrollTop > 0);
         scrollTop = e.target.scrollTop;
 
@@ -42,7 +41,7 @@ let Grid = React.createClass({
         if (lastVisibleIndex >= (this.props.models.length - 1) && isScrollingDown) {
             this.props.requestModels(this.props.models.length);
         }
-    }, 100),
+    },
 
     handleModelClick(e) {
         e.preventDefault();

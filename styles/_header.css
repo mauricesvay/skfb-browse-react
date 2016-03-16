@@ -12,8 +12,10 @@
         margin: 8px 0 0 10px;
     }
 
+.toolbar {
+    display: flex;
+}
 .toolbar-tool {
-    float: left;
     padding: 15px 20px;
 }
 
@@ -23,18 +25,14 @@
     padding-right: 4px;
 }
 
-.filters {
-    display: none;
-    float: right;
-    padding: 15px 20px;
+.userInfo {
+    flex: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px;
 }
-    .filters .btn {
-        color: rgba(255,255,255,.6);
-        background: #1687ac;
-    }
-    .filters .btn.active,
-    .filters .btn:active,
-    .filters .btn:hover {
-        color: #FFF;
-        background: #106E8D;
-    }
+.userInfo a {
+    color: #fff;
+    cursor: pointer;
+}
