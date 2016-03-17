@@ -34,9 +34,16 @@ let Grid = React.createClass({
     },
 
     handleScroll: function(e){
+        const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
         var isScrollingDown = (e.target.scrollTop - scrollTop > 0);
-        scrollTop = e.target.scrollTop;
+        var isAtBottom = lastVisibleIndex >= (this.props.models.length - 1);
 
+        if (isScrollingDown && isAtBottom) {
+            this.loadMore();
+        }
+    },
+
+    loadMore: function() {
         var nextOffset = 0;
         if (this.props.nextOffset) {
             nextOffset = this.props.nextOffset;
@@ -44,10 +51,7 @@ let Grid = React.createClass({
             nextOffset = this.props.models.length;
         }
 
-        const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
-        if (lastVisibleIndex >= (this.props.models.length - 1) && isScrollingDown) {
-            this.props.requestModels(nextOffset);
-        }
+        this.props.requestModels(nextOffset);
     },
 
     handleModelClick(e) {
@@ -65,7 +69,7 @@ let Grid = React.createClass({
         if (this.props.isLoading) {
             return <div style={{background:'black', color: 'white', textAlign: 'center', padding:'10px'}}>Loading</div>
         } else {
-            return null;
+            return <div style={{background:'black', color: 'white', textAlign: 'center', padding:'10px'}} onClick={this.loadMore}>Load more</div>;
         }
     },
 
