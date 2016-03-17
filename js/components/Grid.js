@@ -37,9 +37,16 @@ let Grid = React.createClass({
         var isScrollingDown = (e.target.scrollTop - scrollTop > 0);
         scrollTop = e.target.scrollTop;
 
+        var nextOffset = 0;
+        if (this.props.nextOffset) {
+            nextOffset = this.props.nextOffset;
+        } else {
+            nextOffset = this.props.models.length;
+        }
+
         const [firstVisibleIndex, lastVisibleIndex] = this.refs['list'].getVisibleRange();
         if (lastVisibleIndex >= (this.props.models.length - 1) && isScrollingDown) {
-            this.props.requestModels(this.props.models.length);
+            this.props.requestModels(nextOffset);
         }
     },
 

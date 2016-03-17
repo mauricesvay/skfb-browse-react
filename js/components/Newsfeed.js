@@ -11,6 +11,7 @@ var key = JSON.stringify(query);
 function mapStateToProps(state) {
     var models = state.models[key] || [];
     var isLoading = !!state.isLoading[key];
+    var nextOffset = models.length;
 
     // Only keep model uploads
     models = _.filter(models, (story)=>{
@@ -20,11 +21,12 @@ function mapStateToProps(state) {
         var model = story.obj;
         model.user = story.actor;
         return model;
-    })
+    });
 
     return {
         models,
-        isLoading
+        isLoading,
+        nextOffset
     };
 }
 
