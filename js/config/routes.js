@@ -1,6 +1,8 @@
 import React from 'react';
 import { hashHistory, Router, Route } from 'react-router';
 
+import User from '../User';
+
 import App from '../components/App';
 import Newsfeed from '../components/Newsfeed';
 import Staffpicks from '../components/Staffpicks';
@@ -13,7 +15,18 @@ import ModelDetail from '../components/ModelDetail';
 module.exports = (
     <Router history={hashHistory}>
         <Route name="app" path="/" component={App}>
-            <Route name="newsfeed" path="/newsfeed" component={Newsfeed}/>
+            <Route
+                name="newsfeed"
+                path="/newsfeed"
+                component={Newsfeed}
+                onEnter={
+                    (nextState, replace)=>{
+                        if (!User.isConnected()) {
+                            replace('/');
+                        }
+                    }
+                }
+            />
             <Route name="staffpicks" path="/staffpicks" component={Staffpicks}/>
             <Route name="popular" path="/popular" component={Popular}/>
             <Route name="recent" path="/recent" component={Recent}/>

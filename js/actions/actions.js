@@ -1,5 +1,5 @@
 import sketchfabSDK from '../lib/sketchfab.js';
-import cookie from 'cookie_js';
+import User from '../User';
 var _ = {
     clone: require('lodash/clone')
 };
@@ -19,13 +19,21 @@ var isRequestPending = {};
 function getFeed(dispatch, query, offset=0) {
     let key = JSON.stringify(query);
 
+    if (!User.isConnected()) {
+        console.log('User is not connected');
+        dispatch({
+            type: FETCH_MODELS_ERROR,
+            query: query
+        });
+    }
+
     if (isRequestPending[key]) {
         console.info('getFeed: already requesting');
         return;
     }
 
     isRequestPending[key] = true;
-    sketchfabSDK.Feed.all(cookie.get('accessToken'), {offset})
+    sketchfabSDK.Feed.all(User.getAccessToken(), {offset})
         .then((feed)=>{
             isRequestPending[key] = false;
             dispatch({
@@ -106,9 +114,9 @@ module.exports = {
                 type: LOGIN_REQUEST
             });
 
-            sketchfabSDK.connect()
+            User.connect()
                 .then(function(grant){
-                    cookie.set('accessToken', grant.access_token);
+                    User.setAccessToken(grant.access_token);
                     dispatch({
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
@@ -124,6 +132,7 @@ module.exports = {
     },
 
     logout: function() {
+        User.logout();
         dispatch({
             type: LOGOUT
         });

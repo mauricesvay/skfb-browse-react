@@ -62,7 +62,6 @@ function userReducer(state=defaultUserState, action) {
             console.log('Login error');
             return state;
         case LOGOUT:
-            cookie.remove('accessToken');
             return {
                 accessToken: ''
             };
