@@ -1,6 +1,4 @@
 import SketchfabSDK from 'SketchfabSDK';
+import config from '../config/config';
 
-module.exports = new SketchfabSDK({
-    client_id: 'ig-3miFgAznsYmxUP9VGoN@Chj7ZIrUfAG!UWwne',
-    redirect_uri: 'http://localhost:8000/authSuccess.html'
-});
+module.exports = new SketchfabSDK(config.oauth2);
