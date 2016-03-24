@@ -36,3 +36,11 @@
     color: #fff;
     cursor: pointer;
 }
+.userInfo button {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    margin-left: 10px;
+}
