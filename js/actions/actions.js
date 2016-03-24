@@ -131,10 +131,10 @@ module.exports = {
         }
     },
 
-    logout: function() {
+    requestLogout: function() {
         User.logout();
-        dispatch({
+        return {
             type: LOGOUT
-        });
+        };
     }
 };

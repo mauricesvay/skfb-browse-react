@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {requestLogin} from '../actions/actions';
+import {requestLogin, requestLogout} from '../actions/actions';
 import UserInfo from './UserInfo';
 
 function mapStateToProps(state, ownProps) {
@@ -12,7 +12,10 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         onLoginClick: (e) => {
             e.preventDefault();
-            dispatch(requestLogin())
+            dispatch(requestLogin());
+        },
+        onLogoutClick: (e) => {
+            dispatch(requestLogout());
         }
     }
 }
