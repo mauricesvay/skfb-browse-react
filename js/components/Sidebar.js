@@ -17,18 +17,16 @@ let Sidebar = React.createClass({
                         Categories
                     </h2>
                     <ul className="categories sidebar-menu">
-                        <li className="item"><Link activeClassName="active" to="/category/71260eecdab14a92859a1630e69b5e59">3D Scans</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/7b69e7e004ab4e468fa11350a9e9dbb4">Animal</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/7c8e6d2ef6e34acfafb4dfdd2eac8e9a">Architecture</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/c92452986e70422ca2c6552835a89882">Characters</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/232cf6b0e479418fb9845165ea855ff7">Games</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/528c1d6ede944cf685b2b36eb595f26d">Miscellaneous</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/dccdb5378e924075aaee17288b6b2df1">Objects</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/277778eda2ec467cb6e028b85682ffd3">Printable</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/04b6d4d0e43c403f8f226c374b5381ea">Scenes</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/e4a6ff21ea0042ff9f0f64db2d0adaec">Science</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/dbe6cb768f2d4b31ba1611d3229d7431">Vegetal</Link></li>
-                        <li className="item"><Link activeClassName="active" to="/category/cf442dbc806b432d9e13f4dc3b1df0c0">Vehicles</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/ed9e048550b2478eb1ab2faaba192832">Animals & creatures</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/f825c721edb541dbbc8cd210123616c7">Architecture</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/22a2f677efad4d7bbca5ad45f9b5868e">Cars & Vehicles</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/2d643ff5ed03405b9c34ecdffff9d8d8">Characters</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/86f23935367b4a1f9647c8a20e03d716">Cultural Heritage</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/3badf36bd9f549bdba295334d75e04d3">Gaming</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/c51b29706d4e4e93a82e5eea7cbe6f91">Places & Scenes</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/d7cebaeca8604ebab1480e413404b679">Products & Technology</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/17d20ca7b35243d4a45171838b50704c">Science, Nature & Education</Link></li>
+                        <li className="item"><Link activeClassName="active" to="/category/3f8d0eab859c45ae8ea3af1033d6f3e4">Weapons</Link></li>
                     </ul>
                 </div>
             </div>
