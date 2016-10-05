@@ -16,7 +16,7 @@ const LOGOUT = 'LOGOUT';
 
 var isRequestPending = {};
 
-function getFeed(dispatch, query, offset=0) {
+function getFeed(dispatch, query, offset = 0) {
     let key = JSON.stringify(query);
 
     if (!User.isConnected()) {
@@ -33,8 +33,10 @@ function getFeed(dispatch, query, offset=0) {
     }
 
     isRequestPending[key] = true;
-    sketchfabSDK.Feed.all(User.getAccessToken(), {offset})
-        .then((feed)=>{
+    sketchfabSDK.Feed.all(User.getAccessToken(), {
+            offset
+        })
+        .then((feed) => {
             isRequestPending[key] = false;
             dispatch({
                 type: FETCH_MODELS_SUCCESS,
@@ -42,7 +44,7 @@ function getFeed(dispatch, query, offset=0) {
                 models: feed.results
             });
         })
-        .catch((error)=>{
+        .catch((error) => {
             isRequestPending[key] = false;
             console.error('getFeed: error', error);
             dispatch({
@@ -53,10 +55,14 @@ function getFeed(dispatch, query, offset=0) {
 }
 
 function getModels(dispatch, query, offset) {
+    const DEFAULT_COUNT = 24;
     var requestQuery = _.clone(query);
     if (offset) {
         requestQuery.offset = offset;
+    } else {
+        requestQuery.offset = 0;
     }
+    requestQuery.count = DEFAULT_COUNT;
     let key = JSON.stringify(requestQuery);
 
     if (isRequestPending[key]) {
@@ -72,6 +78,13 @@ function getModels(dispatch, query, offset) {
                 query: query,
                 models: response.results
             });
+
+            // Prefetch next page
+            dispatch(requestPrefetch({
+                ...requestQuery,
+                offset: requestQuery.offset + response.results.length
+            }));
+
         }, () => {
             console.error('getModels: error');
             isRequestPending[key] = false;
@@ -80,6 +93,13 @@ function getModels(dispatch, query, offset) {
                 query: query
             });
         });
+    }
+}
+
+function requestPrefetch(query) {
+    return function(dispatch) {
+        console.log('Prefetching', query);
+        sketchfabSDK.Models.all(query);
     }
 }
 
@@ -115,14 +135,14 @@ module.exports = {
             });
 
             User.connect()
-                .then(function(grant){
+                .then(function(grant) {
                     User.setAccessToken(grant.access_token);
                     dispatch({
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
                     });
                 })
-                .catch(function(error){
+                .catch(function(error) {
                     dispatch({
                         type: LOGIN_ERROR,
                         error: error
