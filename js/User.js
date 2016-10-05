@@ -1,4 +1,6 @@
-import cookie from 'cookie_js';
+import {
+    cookie
+} from 'cookie_js';
 import sketchfabSDK from './lib/sketchfab.js';
 
 module.exports = {
