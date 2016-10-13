@@ -1,18 +1,18 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {requestModels} from '../actions/actions';
-import Grid from './Grid';
+import Grid from '../components/Grid';
 
-var query = {'flag':'staffpicked'};
+var query = {
+    'sort_by': '-likeCount',
+    'date': 7
+};
 var key = JSON.stringify(query);
 
 function mapStateToProps(state) {
     var models = state.models[key] || [];
     var isLoading = !!state.isLoading[key];
 
-    return {
-        models,
-        isLoading
-    };
+    return {models, isLoading};
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import sketchfabSDK from '../lib/sketchfab.js';
 
-import Sidebar from './Sidebar';
-import Modal from './Modal';
-import SearchForm from './SearchForm';
-import UserInfo from './UserInfoContainer';
+import Sidebar from '../components/Sidebar';
+import Modal from '../components/Modal';
+import SearchForm from '../components/SearchForm';
+import UserInfo from '../components/UserInfoContainer';
 
 let App = React.createClass({
 
@@ -18,9 +18,7 @@ let App = React.createClass({
     },
 
     getChildContext: function() {
-        return {
-            router: this.context.router
-        };
+        return {router: this.context.router};
     },
 
     componentWillReceiveProps(nextProps) {
@@ -33,13 +31,9 @@ let App = React.createClass({
 
     render() {
 
-        let { location } = this.props;
+        let {location} = this.props;
 
-        let isModal = (
-            location.state &&
-            location.state.modal &&
-            this.previousChildren
-        );
+        let isModal = (location.state && location.state.modal && this.previousChildren);
 
         return (
             <div className="app">
@@ -57,15 +51,17 @@ let App = React.createClass({
                 <div className="main">
                     <Sidebar/>
                     <div className="content">
-                        {isModal ?
-                            this.previousChildren :
-                            this.props.children
-                        }
+                        {isModal
+                            ? this.previousChildren
+                            : this.props.children
+}
                     </div>
                 </div>
                 {isModal && (
-                    <Modal isOpen={true} onExit={()=>{this.context.router.goBack();}}>
-                            {this.props.children}
+                    <Modal isOpen={true} onExit={() => {
+                        this.context.router.goBack();
+                    }}>
+                        {this.props.children}
                     </Modal>
                 )}
             </div>

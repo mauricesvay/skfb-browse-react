@@ -3,14 +3,14 @@ import {hashHistory, Router, Route} from 'react-router';
 
 import User from '../User';
 
-import App from '../components/App';
-import Newsfeed from '../components/Newsfeed';
-import Staffpicks from '../components/Staffpicks';
-import Popular from '../components/Popular';
-import Recent from '../components/Recent';
-import Search from '../components/Search';
-import Category from '../components/Category';
-import ModelDetail from '../components/ModelDetail';
+import App from '../views/App';
+import Newsfeed from '../views/Newsfeed';
+import Staffpicks from '../views/Staffpicks';
+import Popular from '../views/Popular';
+import Recent from '../views/Recent';
+import Search from '../views/Search';
+import Category from '../views/Category';
+import ModelDetail from '../views/ModelDetail';
 
 module.exports = (
     <Router history={hashHistory}>

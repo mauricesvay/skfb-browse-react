@@ -1,11 +1,13 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {requestModels} from '../actions/actions';
-import Grid from './Grid';
+import Grid from '../components/Grid';
 var _ = {
     filter: require('lodash/filter')
 };
 
-var query = {'special':'newsfeed'};
+var query = {
+    'special': 'newsfeed'
+};
 var key = JSON.stringify(query);
 
 function mapStateToProps(state) {
@@ -14,20 +16,16 @@ function mapStateToProps(state) {
     var nextOffset = models.length;
 
     // Only keep model uploads
-    models = _.filter(models, (story)=>{
+    models = _.filter(models, (story) => {
         return story.verb === 'upload';
     });
-    models = models.map((story)=>{
+    models = models.map((story) => {
         var model = story.obj;
         model.user = story.actor;
         return model;
     });
 
-    return {
-        models,
-        isLoading,
-        nextOffset
-    };
+    return {models, isLoading, nextOffset};
 }
 
 function mapDispatchToProps(dispatch) {
