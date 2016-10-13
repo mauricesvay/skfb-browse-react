@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router';
-import sketchfabSDK from '../lib/sketchfab.js';
 
 import Sidebar from '../components/Sidebar';
 import Modal from '../components/Modal';
