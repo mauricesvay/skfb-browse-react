@@ -1,35 +1,40 @@
 import React from 'react';
 var _ = {
-    sortBy: require('lodash/sortBy')
+    sortBy: require( 'lodash/sortBy' )
 };
 
 var Model = React.createClass({
 
-    handleMouseOver: function() {
+    handleMouseOver: function( ) {
         // console.log('->' + this.props.model.urlid);
     },
 
-    handleMouseOut: function() {
+    handleMouseOut: function( ) {
         // console.log('<-' + this.props.model.urlid);
     },
 
     getAvatar: function( size ) {
-        var images = this.props.model.user.avatars.images;
+
         var avatar = '';
-        for (var i=0; i<images.length; i++) {
-            avatar = images[i].url;
-            if ( images[i].width == size ) {
-                break;
+
+        if ( this.props.model.user && this.props.model.user.avatars && this.props.model.user.images ) {
+            var images = this.props.model.user.avatars.images;
+            for ( var i = 0; i < images.length; i++ ) {
+                avatar = images[i].url;
+                if ( images[i].width == size ) {
+                    break;
+                }
             }
         }
+
         return avatar;
     },
 
-    render: function() {
+    render: function( ) {
 
-        var images = _.sortBy(this.props.model.thumbnails.images, 'width');
+        var images = _.sortBy( this.props.model.thumbnails.images, 'width' );
         var preview;
-        for (var j=0; j<images.length; j++) {
+        for ( var j = 0; j < images.length; j++ ) {
             preview = images[j].url;
             if ( images[j].width >= 400 ) {
                 break;
@@ -37,23 +42,35 @@ var Model = React.createClass({
         }
 
         var fallbackUrl = this.props.model.fallback && this.props.model.fallback.url;
-        var avatar = this.getAvatar(32);
+        var avatar = this.getAvatar( 32 );
 
         return (
-            <div data-uid={this.props.model.urlid} className="grid-item"  onClick={this.props.clickHandler} onMouseOver={this.props.mouseOverHandler} onMouseOut={this.handleMouseOut}>
+            <div data-uid={this.props.model.urlid} className="grid-item" onClick={this.props.clickHandler} onMouseOver={this.props.mouseOverHandler} onMouseOut={this.handleMouseOut}>
                 <div className="modelcard" data-uid={this.props.model.urlid}>
                     <a href={this.props.model.viewerUrl} target="_blank">
-                        <div className="modelcard-preview" style={{backgroundImage: 'url(' + preview + ')'}}>
+                        <div className="modelcard-preview" style={{
+                            backgroundImage: 'url(' + preview + ')'
+                        }}>
                             <div className="fallback-container">
-                                <div className="fallback-image" style={{backgroundImage: 'url(' + (fallbackUrl ? fallbackUrl : '')  + ')'}}></div>
+                                <div className="fallback-image" style={{
+                                    backgroundImage: 'url(' + ( fallbackUrl
+                                        ? fallbackUrl
+                                        : '' ) + ')'
+                                }}></div>
                             </div>
                             <div className="fallback-loader"></div>
                             <div className="meta">
-                                <span className={this.props.model.likeCount > 0 ? 'count' : 'hidden'} title="Likes">
-                                    <i className="ion ion-ios-star"></i> {this.props.model.likeCount}
+                                <span className={this.props.model.likeCount > 0
+                                    ? 'count'
+                                    : 'hidden'} title="Likes">
+                                    <i className="ion ion-ios-star"></i>
+                                    {this.props.model.likeCount}
                                 </span>
-                                <span className={this.props.model.commentCount > 0 ? 'count' : 'hidden'} title="Comments">
-                                    <i className="ion ion-ios-chatbubble"></i> {this.props.model.commentCount}
+                                <span className={this.props.model.commentCount > 0
+                                    ? 'count'
+                                    : 'hidden'} title="Comments">
+                                    <i className="ion ion-ios-chatbubble"></i>
+                                    {this.props.model.commentCount}
                                 </span>
                             </div>
                         </div>

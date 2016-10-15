@@ -1,8 +1,12 @@
 import sketchfabSDK from '../lib/sketchfab.js';
+import SketchfabDataApi from '../lib/api.js';
+import Url from 'url';
 import User from '../User';
 var _ = {
-    clone: require('lodash/clone')
+    clone: require( 'lodash/clone' )
 };
+
+var sketchabDataApi = new SketchfabDataApi();
 
 const FETCH_MODELS_REQUEST = 'FETCH_MODELS_REQUEST';
 const FETCH_MODELS_SUCCESS = 'FETCH_MODELS_SUCCESS';
@@ -16,90 +20,102 @@ const LOGOUT = 'LOGOUT';
 
 var isRequestPending = {};
 
-function getFeed(dispatch, query, offset = 0) {
-    let key = JSON.stringify(query);
+function getFeed( dispatch, query, offset = 0 ) {
+    let key = JSON.stringify( query );
 
-    if (!User.isConnected()) {
-        console.log('User is not connected');
-        dispatch({
+    if ( !User.isConnected() ) {
+        console.log( 'User is not connected' );
+        dispatch( {
             type: FETCH_MODELS_ERROR,
             query: query
-        });
+        } );
     }
 
-    if (isRequestPending[key]) {
-        console.info('getFeed: already requesting');
+    if ( isRequestPending[ key ] ) {
+        console.info( 'getFeed: already requesting' );
         return;
     }
 
-    isRequestPending[key] = true;
-    sketchfabSDK.Feed.all(User.getAccessToken(), {
+    isRequestPending[ key ] = true;
+    sketchfabSDK.Feed.all( User.getAccessToken(), {
             offset
-        })
-        .then((feed) => {
-            isRequestPending[key] = false;
-            dispatch({
+        } )
+        .then( ( feed ) => {
+            isRequestPending[ key ] = false;
+            dispatch( {
                 type: FETCH_MODELS_SUCCESS,
                 query: query,
                 models: feed.results
-            });
-        })
-        .catch((error) => {
-            isRequestPending[key] = false;
-            console.error('getFeed: error', error);
-            dispatch({
+            } );
+        } )
+        .catch( ( error ) => {
+            isRequestPending[ key ] = false;
+            console.error( 'getFeed: error', error );
+            dispatch( {
                 type: FETCH_MODELS_ERROR,
                 query: query
-            });
-        });
+            } );
+        } );
 }
 
-function getModels(dispatch, query, offset) {
-    const DEFAULT_COUNT = 24;
-    var requestQuery = _.clone(query);
-    if (offset) {
-        requestQuery.offset = offset;
-    } else {
-        requestQuery.offset = 0;
-    }
-    requestQuery.count = DEFAULT_COUNT;
-    let key = JSON.stringify(requestQuery);
+function getModels( dispatch, key, query, cursor ) {
 
-    if (isRequestPending[key]) {
-        console.info('getModels: already requesting');
+    var requestQuery = _.clone( query );
+    if ( cursor ) {
+        requestQuery.cursor = cursor;
+    }
+
+    if ( isRequestPending[ key ] ) {
+        console.info( 'getModels: already requesting' );
         return;
     } else {
-        console.info('requestModels', requestQuery);
-        isRequestPending[key] = true;
-        sketchfabSDK.Models.all(requestQuery).then((response) => {
-            isRequestPending[key] = false;
-            dispatch({
+        console.info( 'requestModels', requestQuery );
+        isRequestPending[ key ] = true;
+
+        sketchabDataApi.models.get( requestQuery ).then( ( response ) => {
+
+            isRequestPending[ key ] = false;
+            var urlParts = Url.parse( response.data.next, true );
+            var urlQuery = urlParts.query;
+            var nextCursor = urlQuery.cursor || '';
+
+            var models = response.data.results.map( ( model ) => {
+                model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
+                return model;
+            } );
+
+            dispatch( {
                 type: FETCH_MODELS_SUCCESS,
+                key: key,
                 query: query,
-                models: response.results
-            });
+                models: models,
+                nextCursor: nextCursor
+            } );
 
             // Prefetch next page
-            dispatch(requestPrefetch({
+            dispatch( requestPrefetch( key, {
                 ...requestQuery,
-                offset: requestQuery.offset + response.results.length
-            }));
+                cursor: nextCursor
+            } ) );
 
-        }, () => {
-            console.error('getModels: error');
-            isRequestPending[key] = false;
-            dispatch({
+        } ).catch( () => {
+
+            console.error( 'getModels: error' );
+            isRequestPending[ key ] = false;
+            dispatch( {
                 type: FETCH_MODELS_ERROR,
+                key: key,
                 query: query
-            });
-        });
+            } );
+
+        } );
     }
 }
 
-function requestPrefetch(query) {
-    return function(dispatch) {
-        console.log('Prefetching', query);
-        sketchfabSDK.Models.all(query);
+function requestPrefetch( key, query ) {
+    return function( dispatch ) {
+        console.log( 'Prefetching', query );
+        sketchabDataApi.models.get( query );
     }
 }
 
@@ -113,41 +129,43 @@ module.exports = {
     LOGIN_ERROR: LOGIN_ERROR,
     LOGOUT: LOGOUT,
 
-    requestModels: function(query, offset) {
-        return function(dispatch) {
-            dispatch({
+    requestModels: function( key, query, cursor ) {
+        return function( dispatch ) {
+            dispatch( {
                 type: FETCH_MODELS_REQUEST,
-                query: query
-            });
+                key: key,
+                query: query,
+                cursor: cursor
+            } );
 
-            if (query.special && query.special === 'newsfeed') {
-                getFeed(dispatch, query, offset);
+            if ( query.special && query.special === 'newsfeed' ) {
+                getFeed( dispatch, query, offset );
             } else {
-                getModels(dispatch, query, offset);
+                getModels( dispatch, key, query, cursor );
             }
         }
     },
 
     requestLogin: function() {
-        return function(dispatch) {
-            dispatch({
+        return function( dispatch ) {
+            dispatch( {
                 type: LOGIN_REQUEST
-            });
+            } );
 
             User.connect()
-                .then(function(grant) {
-                    User.setAccessToken(grant.access_token);
-                    dispatch({
+                .then( function( grant ) {
+                    User.setAccessToken( grant.access_token );
+                    dispatch( {
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
-                    });
-                })
-                .catch(function(error) {
-                    dispatch({
+                    } );
+                } )
+                .catch( function( error ) {
+                    dispatch( {
                         type: LOGIN_ERROR,
                         error: error
-                    });
-                });
+                    } );
+                } );
         }
     },
 
