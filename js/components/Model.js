@@ -17,13 +17,11 @@ var Model = React.createClass({
 
         var avatar = '';
 
-        if ( this.props.model.user && this.props.model.user.avatars && this.props.model.user.images ) {
-            var images = this.props.model.user.avatars.images;
-            for ( var i = 0; i < images.length; i++ ) {
-                avatar = images[i].url;
-                if ( images[i].width == size ) {
-                    break;
-                }
+        var images = this.props.model.user.avatar.images;
+        for ( var i = 0; i < images.length; i++ ) {
+            avatar = images[i].url;
+            if ( images[i].width == size ) {
+                break;
             }
         }
 
