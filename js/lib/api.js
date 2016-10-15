@@ -9,6 +9,14 @@ function SketchfabDataApi() {
 }
 
 SketchfabDataApi.prototype = {
+
+    model: {
+        get: function( uid ) {
+            var url = BASE_URL + MODELS_ENDPOINT + '/' + uid;
+            return axios.get( url );
+        }
+    },
+
     models: {
         get: function( query ) {
             var qs = querystring.stringify( query );

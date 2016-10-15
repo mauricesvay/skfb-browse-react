@@ -1,23 +1,23 @@
 import React from 'react';
-import sketchfabSDK from '../lib/sketchfab.js';
+import SketchfabDataApi from '../lib/api.js';
+
+var sketchfabDataApi = new SketchfabDataApi( );
 
 let ModelDetail = React.createClass({
 
-    getInitialState() {
-        return {
-            url: 'about:blank'
-        };
+    getInitialState( ) {
+        return { url: 'about:blank' };
     },
 
-    componentWillMount() {
-        sketchfabSDK.Model.byId(this.props.params.id).then((response) => {
+    componentWillMount( ) {
+        sketchfabDataApi.model.get( this.props.params.id ).then(( response ) => {
             this.setState({
-                url: response.embedUrl + '?autostart=1'
+                url: response.data.embedUrl + '?autostart=1'
             });
         });
     },
 
-    render() {
+    render( ) {
         return (
             <div className="modelDetail">
                 <iframe src={this.state.url}></iframe>

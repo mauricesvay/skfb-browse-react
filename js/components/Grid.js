@@ -53,23 +53,23 @@ let Grid = React.createClass({
     },
 
     handleModelClick( e ) {
-        e.preventDefault( );
-        var id = e.currentTarget.getAttribute( 'data-uid' );
-        this.context.router.push({
-            pathname: '/model/' + id,
-            state: {
-                modal: true
-            }
-        });
+        if (!( e.ctrlKey || e.metaKey )) {
+            e.preventDefault( );
+            var id = e.currentTarget.getAttribute( 'data-uid' );
+            this.context.router.push({
+                pathname: '/model/' + id,
+                state: {
+                    modal: true
+                }
+            });
+        }
     },
-
     renderItem( index/*, key*/) {
         var model = this.props.models[index];
         return (
             <Model key={model.uid} model={model} clickHandler={this.handleModelClick}></Model>
         );
     },
-
     renderLoading( ) {
         if ( this.props.isLoading ) {
             return <div style={{
@@ -87,7 +87,6 @@ let Grid = React.createClass({
             }} onClick={this.loadMore}>Load more</div>;
         }
     },
-
     render( ) {
         return (
             <div className="browse-grid" onScroll={this.handleScroll}>
