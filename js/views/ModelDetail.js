@@ -12,7 +12,7 @@ let ModelDetail = React.createClass({
     componentWillMount( ) {
         sketchfabDataApi.model.get( this.props.params.id ).then(( response ) => {
             this.setState({
-                url: response.data.embedUrl + '?autostart=1'
+                url: response.embedUrl + '?autostart=1'
             });
         });
     },

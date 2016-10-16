@@ -75,11 +75,11 @@ function getModels( dispatch, key, query, cursor ) {
         sketchabDataApi.models.get( requestQuery ).then( ( response ) => {
 
             isRequestPending[ key ] = false;
-            var urlParts = Url.parse( response.data.next, true );
+            var urlParts = Url.parse( response.next, true );
             var urlQuery = urlParts.query;
             var nextCursor = urlQuery.cursor || '';
 
-            var models = response.data.results.map( ( model ) => {
+            var models = response.results.map( ( model ) => {
                 model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
                 return model;
             } );
@@ -98,9 +98,9 @@ function getModels( dispatch, key, query, cursor ) {
                 cursor: nextCursor
             } ) );
 
-        } ).catch( () => {
+        } ).catch( ( error ) => {
 
-            console.error( 'getModels: error' );
+            console.error( 'getModels: error', error );
             isRequestPending[ key ] = false;
             dispatch( {
                 type: FETCH_MODELS_ERROR,
