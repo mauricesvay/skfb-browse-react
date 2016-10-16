@@ -12,6 +12,10 @@ const FETCH_MODELS_REQUEST = 'FETCH_MODELS_REQUEST';
 const FETCH_MODELS_SUCCESS = 'FETCH_MODELS_SUCCESS';
 const FETCH_MODELS_ERROR = 'FETCH_MODELS_ERROR';
 
+const FETCH_MODEL_REQUEST = 'FETCH_MODEL_REQUEST';
+const FETCH_MODEL_SUCCESS = 'FETCH_MODEL_SUCCESS';
+const FETCH_MODEL_ERROR = 'FETCH_MODEL_ERROR';
+
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -113,10 +117,36 @@ function getModels( dispatch, key, query, cursor ) {
 }
 
 function requestPrefetch( key, query ) {
-    return function( dispatch ) {
+    return function ( dispatch ) {
         console.log( 'Prefetching', query );
         sketchabDataApi.models.get( query );
     }
+}
+
+function getModel( dispatch, uid ) {
+
+    if ( isRequestPending[ uid ] ) {
+        console.info( 'getModel: already requesting', uid );
+        return;
+    } else {
+        console.log( 'getModel: ', uid );
+        isRequestPending[ uid ] = true;
+        sketchabDataApi.model.get( uid ).then( ( model ) => {
+            isRequestPending[ uid ] = false;
+            dispatch( {
+                type: FETCH_MODEL_SUCCESS,
+                uid: uid,
+                model: model
+            } );
+        } ).catch( () => {
+            isRequestPending[ uid ] = false;
+            dispatch( {
+                type: FETCH_MODEL_ERROR,
+                uid: uid
+            } );
+        } );
+    }
+
 }
 
 module.exports = {
@@ -124,13 +154,17 @@ module.exports = {
     FETCH_MODELS_SUCCESS: FETCH_MODELS_SUCCESS,
     FETCH_MODELS_ERROR: FETCH_MODELS_ERROR,
 
+    FETCH_MODEL_REQUEST: FETCH_MODEL_REQUEST,
+    FETCH_MODEL_SUCCESS: FETCH_MODEL_SUCCESS,
+    FETCH_MODEL_ERROR: FETCH_MODEL_ERROR,
+
     LOGIN_REQUEST: LOGIN_REQUEST,
     LOGIN_SUCCESS: LOGIN_SUCCESS,
     LOGIN_ERROR: LOGIN_ERROR,
     LOGOUT: LOGOUT,
 
-    requestModels: function( key, query, cursor ) {
-        return function( dispatch ) {
+    requestModels: function ( key, query, cursor ) {
+        return function ( dispatch ) {
             dispatch( {
                 type: FETCH_MODELS_REQUEST,
                 key: key,
@@ -146,21 +180,32 @@ module.exports = {
         }
     },
 
-    requestLogin: function() {
-        return function( dispatch ) {
+    requestModel: function ( uid ) {
+        return function ( dispatch ) {
+            dispatch( {
+                type: FETCH_MODEL_REQUEST,
+                uid: uid
+            } );
+
+            getModel( dispatch, uid );
+        }
+    },
+
+    requestLogin: function () {
+        return function ( dispatch ) {
             dispatch( {
                 type: LOGIN_REQUEST
             } );
 
             User.connect()
-                .then( function( grant ) {
+                .then( function ( grant ) {
                     User.setAccessToken( grant.access_token );
                     dispatch( {
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
                     } );
                 } )
-                .catch( function( error ) {
+                .catch( function ( error ) {
                     dispatch( {
                         type: LOGIN_ERROR,
                         error: error
@@ -169,7 +214,7 @@ module.exports = {
         }
     },
 
-    requestLogout: function() {
+    requestLogout: function () {
         User.logout();
         return {
             type: LOGOUT

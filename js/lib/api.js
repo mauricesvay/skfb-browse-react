@@ -8,7 +8,7 @@ var MODELS_ENDPOINT = '/v3/models';
 var isDev = ( process.env.NODE_ENV === 'development' );
 
 function apiGet( url, config ) {
-    return new Promise( function( resolve, reject ) {
+    return new Promise( function ( resolve, reject ) {
         // only cache requests with cursor
         if ( url.indexOf( 'cursor=' ) !== -1 ) {
             localforage.getItem( url ).then( ( data ) => {
@@ -44,21 +44,34 @@ function SketchfabDataApi() {
 SketchfabDataApi.prototype = {
 
     model: {
-        get: function( uid ) {
-            var url = BASE_URL + MODELS_ENDPOINT + '/' + uid;
-            return apiGet( url );
+        get: function ( uid ) {
+            return new Promise( function ( resolve, reject ) {
+                var urlInfo = BASE_URL + MODELS_ENDPOINT + '/' + uid;
+                var urlFallback = BASE_URL + '/i/models/' + uid + '/fallback';
+
+                axios.all( [
+                    axios.get( urlInfo ),
+                    axios.get( urlFallback )
+                ] ).then( function ( responses ) {
+                    var modelInfo = responses[ 0 ].data;
+                    modelInfo.fallback = responses[ 1 ].data.results;
+                    resolve( modelInfo );
+                } ).catch( function ( error ) {
+                    reject( error );
+                } );
+            } );
         }
     },
 
     models: {
-        get: function( query ) {
+        get: function ( query ) {
             var qs = querystring.stringify( query );
             var url = BASE_URL + MODELS_ENDPOINT + '?' + qs;
             return apiGet( url );
         }
     },
 
-    search: function( query ) {
+    search: function ( query ) {
 
     }
 }
