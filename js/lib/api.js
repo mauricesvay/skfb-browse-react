@@ -60,6 +60,25 @@ SketchfabDataApi.prototype = {
                     reject( error );
                 } );
             } );
+        },
+
+        getFallback: function ( uid ) {
+            return new Promise( function ( resolve, reject ) {
+                var url = BASE_URL + '/i/models/' + uid + '/fallback';
+
+                localforage.getItem( url ).then( ( data ) => {
+                    if ( data !== null ) {
+                        resolve( data );
+                    } else {
+                        axios.get( url ).then( function ( response ) {
+                            localforage.setItem( url, response.data.results );
+                            resolve( response.data.results );
+                        } ).catch( function ( error ) {
+                            reject( error );
+                        } );
+                    }
+                } );
+            } );
         }
     },
 
