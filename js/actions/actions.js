@@ -58,6 +58,63 @@ function getFeed( dispatch, query, offset = 0 ) {
         } );
 }
 
+function getCollectionModels( dispatch, key, query, cursor ) {
+    var requestQuery = _.clone( query );
+    if ( cursor ) {
+        requestQuery.cursor = cursor;
+    }
+
+    if ( isRequestPending[ key ] ) {
+        console.info( 'getCollectionModels: already requesting' );
+        return;
+    } else {
+        console.info( 'getCollectionModels', requestQuery );
+        isRequestPending[ key ] = true;
+
+        sketchabDataApi.collections.get( requestQuery ).then( ( response ) => {
+
+            isRequestPending[ key ] = false;
+            var nextCursor = '';
+            if ( response.data && response.data.next ) {
+                var urlParts = Url.parse( response.data.next, true );
+                var urlQuery = urlParts.query;
+                var nextCursor = urlQuery.cursor;
+            }
+            var models = response.data.results.map( ( model ) => {
+                model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
+                return model;
+            } );
+
+            dispatch( {
+                type: FETCH_MODELS_SUCCESS,
+                key: key,
+                query: query,
+                models: models,
+                nextCursor: nextCursor
+            } );
+
+            // Prefetch next page
+            if ( nextCursor !== '' ) {
+                dispatch( requestPrefetch( key, {
+                    ...requestQuery,
+                    cursor: nextCursor
+                } ) );
+            }
+
+        } ).catch( () => {
+
+            console.error( 'getCollectionModels: error' );
+            isRequestPending[ key ] = false;
+            dispatch( {
+                type: FETCH_MODELS_ERROR,
+                key: key,
+                query: query
+            } );
+
+        } );
+    }
+}
+
 function getModels( dispatch, key, query, cursor ) {
 
     var requestQuery = _.clone( query );
@@ -113,7 +170,7 @@ function getModels( dispatch, key, query, cursor ) {
 }
 
 function requestPrefetch( key, query ) {
-    return function( dispatch ) {
+    return function ( dispatch ) {
         console.log( 'Prefetching', query );
         sketchabDataApi.models.get( query );
     }
@@ -129,8 +186,8 @@ module.exports = {
     LOGIN_ERROR: LOGIN_ERROR,
     LOGOUT: LOGOUT,
 
-    requestModels: function( key, query, cursor ) {
-        return function( dispatch ) {
+    requestModels: function ( key, query, cursor ) {
+        return function ( dispatch ) {
             dispatch( {
                 type: FETCH_MODELS_REQUEST,
                 key: key,
@@ -138,29 +195,33 @@ module.exports = {
                 cursor: cursor
             } );
 
-            if ( query.special && query.special === 'newsfeed' ) {
-                getFeed( dispatch, query, offset );
+            if ( query.special ) {
+                if ( query.special === 'newsfeed' ) {
+                    getFeed( dispatch, query, offset );
+                } else if ( query.special === 'collection' ) {
+                    getCollectionModels( dispatch, key, query, cursor );
+                }
             } else {
                 getModels( dispatch, key, query, cursor );
             }
         }
     },
 
-    requestLogin: function() {
-        return function( dispatch ) {
+    requestLogin: function () {
+        return function ( dispatch ) {
             dispatch( {
                 type: LOGIN_REQUEST
             } );
 
             User.connect()
-                .then( function( grant ) {
+                .then( function ( grant ) {
                     User.setAccessToken( grant.access_token );
                     dispatch( {
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
                     } );
                 } )
-                .catch( function( error ) {
+                .catch( function ( error ) {
                     dispatch( {
                         type: LOGIN_ERROR,
                         error: error
@@ -169,7 +230,7 @@ module.exports = {
         }
     },
 
-    requestLogout: function() {
+    requestLogout: function () {
         User.logout();
         return {
             type: LOGOUT

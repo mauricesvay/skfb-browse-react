@@ -1,5 +1,5 @@
 import React from 'react';
-import {hashHistory, Router, Route} from 'react-router';
+import { hashHistory, Router, Route } from 'react-router';
 
 import User from '../User';
 
@@ -10,18 +10,19 @@ import Popular from '../views/Popular';
 import Recent from '../views/Recent';
 import Search from '../views/Search';
 import Category from '../views/Category';
+import Collection from '../views/Collection';
 import ModelDetail from '../views/ModelDetail';
 
 module.exports = (
     <Router history={hashHistory}>
-        <Route name="app" path="/" component={App} onEnter={(nextState, replace) => {
-            if (nextState.location.pathname === '/') {
-                replace('/staffpicks');
+        <Route name="app" path="/" component={App} onEnter={( nextState, replace ) => {
+            if ( nextState.location.pathname === '/' ) {
+                replace( '/staffpicks' );
             }
         }}>
-            <Route name="newsfeed" path="/newsfeed" component={Newsfeed} onEnter={(nextState, replace) => {
-                if (!User.isConnected()) {
-                    replace('/');
+            <Route name="newsfeed" path="/newsfeed" component={Newsfeed} onEnter={( nextState, replace ) => {
+                if (!User.isConnected( )) {
+                    replace( '/' );
                 }
             }}/>
             <Route name="staffpicks" path="/staffpicks" component={Staffpicks}/>
@@ -30,6 +31,7 @@ module.exports = (
             <Route name="search" path="/search" component={Search}/>
             <Route name="category" path="/category/:category" component={Category}/>
             <Route name="model" path="/model/:id" component={ModelDetail}/>
+            <Route name="collection" path="/collection/:id" component={Collection}/>
         </Route>
     </Router>
 );
