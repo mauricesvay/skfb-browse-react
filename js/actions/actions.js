@@ -75,12 +75,12 @@ function getCollectionModels( dispatch, key, query, cursor ) {
 
             isRequestPending[ key ] = false;
             var nextCursor = '';
-            if ( response.data && response.data.next ) {
-                var urlParts = Url.parse( response.data.next, true );
+            if ( response && response.next ) {
+                var urlParts = Url.parse( response.next, true );
                 var urlQuery = urlParts.query;
                 var nextCursor = urlQuery.cursor;
             }
-            var models = response.data.results.map( ( model ) => {
+            var models = response.results.map( ( model ) => {
                 model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
                 return model;
             } );
@@ -132,11 +132,11 @@ function getModels( dispatch, key, query, cursor ) {
         sketchabDataApi.models.get( requestQuery ).then( ( response ) => {
 
             isRequestPending[ key ] = false;
-            var urlParts = Url.parse( response.data.next, true );
+            var urlParts = Url.parse( response.next, true );
             var urlQuery = urlParts.query;
             var nextCursor = urlQuery.cursor || '';
 
-            var models = response.data.results.map( ( model ) => {
+            var models = response.results.map( ( model ) => {
                 model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
                 return model;
             } );
@@ -170,9 +170,9 @@ function getModels( dispatch, key, query, cursor ) {
 }
 
 function requestPrefetch( key, query ) {
-    return function ( dispatch ) {
+    return function( dispatch ) {
         console.log( 'Prefetching', query );
-        sketchabDataApi.models.get( query );
+        return sketchabDataApi.models.get( query );
     }
 }
 
@@ -186,8 +186,8 @@ module.exports = {
     LOGIN_ERROR: LOGIN_ERROR,
     LOGOUT: LOGOUT,
 
-    requestModels: function ( key, query, cursor ) {
-        return function ( dispatch ) {
+    requestModels: function( key, query, cursor ) {
+        return function( dispatch ) {
             dispatch( {
                 type: FETCH_MODELS_REQUEST,
                 key: key,
@@ -207,21 +207,21 @@ module.exports = {
         }
     },
 
-    requestLogin: function () {
-        return function ( dispatch ) {
+    requestLogin: function() {
+        return function( dispatch ) {
             dispatch( {
                 type: LOGIN_REQUEST
             } );
 
             User.connect()
-                .then( function ( grant ) {
+                .then( function( grant ) {
                     User.setAccessToken( grant.access_token );
                     dispatch( {
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
                     } );
                 } )
-                .catch( function ( error ) {
+                .catch( function( error ) {
                     dispatch( {
                         type: LOGIN_ERROR,
                         error: error
@@ -230,7 +230,7 @@ module.exports = {
         }
     },
 
-    requestLogout: function () {
+    requestLogout: function() {
         User.logout();
         return {
             type: LOGOUT
