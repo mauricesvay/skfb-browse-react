@@ -1,5 +1,5 @@
 #!/bin/sh
 ./build.sh
-git add --all dist
+git add --all docs
 git commit -m "Updates dist build"
-git subtree push --prefix dist origin gh-pages
+git push origin master

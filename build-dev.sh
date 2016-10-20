@@ -1,8 +1,8 @@
 #!/bin/sh
-rm -rf dist/*
-cp -R styles dist/styles
-cp -R assets dist/assets
-cp index.html dist
-cp authSuccess.html dist
-cp .nojekyll dist
+rm -rf docs/*
+cp -R styles docs/styles
+cp -R assets docs/assets
+cp index.html docs
+cp authSuccess.html docs
+cp .nojekyll docs
 webpack --config webpack.config.dev.js --watch
