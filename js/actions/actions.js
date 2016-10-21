@@ -12,6 +12,10 @@ const FETCH_MODELS_REQUEST = 'FETCH_MODELS_REQUEST';
 const FETCH_MODELS_SUCCESS = 'FETCH_MODELS_SUCCESS';
 const FETCH_MODELS_ERROR = 'FETCH_MODELS_ERROR';
 
+const FETCH_MODEL_REQUEST = 'FETCH_MODEL_REQUEST';
+const FETCH_MODEL_SUCCESS = 'FETCH_MODEL_SUCCESS';
+const FETCH_MODEL_ERROR = 'FETCH_MODEL_ERROR';
+
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -132,11 +136,11 @@ function getModels( dispatch, key, query, cursor ) {
         sketchabDataApi.models.get( requestQuery ).then( ( response ) => {
 
             isRequestPending[ key ] = false;
-            var urlParts = Url.parse( response.data.next, true );
+            var urlParts = Url.parse( response.next, true );
             var urlQuery = urlParts.query;
             var nextCursor = urlQuery.cursor || '';
 
-            var models = response.data.results.map( ( model ) => {
+            var models = response.results.map( ( model ) => {
                 model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
                 return model;
             } );
@@ -155,9 +159,9 @@ function getModels( dispatch, key, query, cursor ) {
                 cursor: nextCursor
             } ) );
 
-        } ).catch( () => {
+        } ).catch( ( error ) => {
 
-            console.error( 'getModels: error' );
+            console.error( 'getModels: error', error );
             isRequestPending[ key ] = false;
             dispatch( {
                 type: FETCH_MODELS_ERROR,
@@ -176,10 +180,40 @@ function requestPrefetch( key, query ) {
     }
 }
 
+function getModel( dispatch, uid ) {
+
+    if ( isRequestPending[ uid ] ) {
+        console.info( 'getModel: already requesting', uid );
+        return;
+    } else {
+        console.log( 'getModel: ', uid );
+        isRequestPending[ uid ] = true;
+        sketchabDataApi.model.get( uid ).then( ( model ) => {
+            isRequestPending[ uid ] = false;
+            dispatch( {
+                type: FETCH_MODEL_SUCCESS,
+                uid: uid,
+                model: model
+            } );
+        } ).catch( () => {
+            isRequestPending[ uid ] = false;
+            dispatch( {
+                type: FETCH_MODEL_ERROR,
+                uid: uid
+            } );
+        } );
+    }
+
+}
+
 module.exports = {
     FETCH_MODELS_REQUEST: FETCH_MODELS_REQUEST,
     FETCH_MODELS_SUCCESS: FETCH_MODELS_SUCCESS,
     FETCH_MODELS_ERROR: FETCH_MODELS_ERROR,
+
+    FETCH_MODEL_REQUEST: FETCH_MODEL_REQUEST,
+    FETCH_MODEL_SUCCESS: FETCH_MODEL_SUCCESS,
+    FETCH_MODEL_ERROR: FETCH_MODEL_ERROR,
 
     LOGIN_REQUEST: LOGIN_REQUEST,
     LOGIN_SUCCESS: LOGIN_SUCCESS,
@@ -204,6 +238,17 @@ module.exports = {
             } else {
                 getModels( dispatch, key, query, cursor );
             }
+        }
+    },
+
+    requestModel: function ( uid ) {
+        return function ( dispatch ) {
+            dispatch( {
+                type: FETCH_MODEL_REQUEST,
+                uid: uid
+            } );
+
+            getModel( dispatch, uid );
         }
     },
 

@@ -1,10 +1,11 @@
-import {
-    combineReducers
-} from 'redux';
+import { combineReducers } from 'redux';
 import {
     FETCH_MODELS_SUCCESS,
     FETCH_MODELS_ERROR,
     FETCH_MODELS_REQUEST,
+    FETCH_MODEL_SUCCESS,
+    FETCH_MODEL_ERROR,
+    FETCH_MODEL_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGOUT
@@ -22,13 +23,13 @@ function modelsReducer( state = {}, action ) {
 
             var key = action.key;
 
-            if ( newState.hasOwnProperty( key ) ) {
-                newState[ key ] = {
-                    models: _.uniqBy( newState[ key ].models.concat( action.models ), m => m.uid ),
+            if (newState.hasOwnProperty( key )) {
+                newState[key] = {
+                    models: _.uniqBy( newState[key].models.concat( action.models ), m => m.uid ),
                     nextCursor: action.nextCursor
                 };
             } else {
-                newState[ key ] = {
+                newState[key] = {
                     models: action.models,
                     nextCursor: action.nextCursor
                 }
@@ -40,19 +41,36 @@ function modelsReducer( state = {}, action ) {
     }
 }
 
+function modelReducer( state = {}, action ) {
+    switch ( action.type ) {
+        case FETCH_MODEL_SUCCESS:
+            var newState = {
+                ...state
+            };
+            var uid = action.uid;
+            newState[uid] = action.model;
+            return newState;
+        case FETCH_MODEL_ERROR:
+        default:
+            return state;
+    }
+}
+
 function loadingReducer( state = {}, action ) {
     var key = JSON.stringify( action.query );
     switch ( action.type ) {
         case FETCH_MODELS_SUCCESS:
         case FETCH_MODELS_ERROR:
-            var newState = {...state
+            var newState = {
+                ...state
             };
-            newState[ key ] = false;
+            newState[key] = false;
             return newState;
         case FETCH_MODELS_REQUEST:
-            var newState = {...state
+            var newState = {
+                ...state
             };
-            newState[ key ] = true;
+            newState[key] = true;
             return newState;
         default:
             return state;
@@ -66,25 +84,17 @@ var defaultUserState = {
 function userReducer( state = defaultUserState, action ) {
     switch ( action.type ) {
         case LOGIN_SUCCESS:
-            return {
-                accessToken: action.accessToken
-            };
+            return { accessToken: action.accessToken };
         case LOGIN_ERROR:
             console.log( 'Login error' );
             return state;
         case LOGOUT:
-            return {
-                accessToken: ''
-            };
+            return { accessToken: '' };
         default:
             return state;
     }
 }
 
-const MainReducer = combineReducers( {
-    models: modelsReducer,
-    isLoading: loadingReducer,
-    user: userReducer
-} );
+const MainReducer = combineReducers({ models: modelsReducer, model: modelReducer, isLoading: loadingReducer, user: userReducer });
 
 module.exports = MainReducer;

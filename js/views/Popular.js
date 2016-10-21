@@ -2,9 +2,20 @@ import { connect } from 'react-redux';
 import { requestModels } from '../actions/actions';
 import Grid from '../components/Grid';
 
+function getDateWithDayOffset( daysOffset ) {
+    var now = +new Date( );
+    var offsetDate = new Date(now + ( daysOffset * 24 * 60 * 60 * 1000 ));
+    var formattedDate = [
+        offsetDate.getUTCFullYear( ),
+        ('00' + ( offsetDate.getUTCMonth( ) + 1 )).substr( -2, 2 ),
+        ('00' + offsetDate.getUTCDate( )).substr( -2, 2 )
+    ].join( '-' );
+    return formattedDate;
+}
+
 var query = {
     'sort_by': '-likeCount',
-    'date': 7,
+    'published_since': getDateWithDayOffset( -7 ),
     'count': 24
 };
 var key = JSON.stringify( query );

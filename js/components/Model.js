@@ -1,16 +1,46 @@
 import React from 'react';
+import SketchfabDataApi from '../lib/api';
 var _ = {
     sortBy: require( 'lodash/sortBy' )
 };
 
+const sketchfabDataApi = new SketchfabDataApi( );
+
 var Model = React.createClass({
 
-    handleMouseOver: function( ) {
-        // console.log('->' + this.props.model.urlid);
+    getInitialState: function( ) {
+        return { fallback: null, isMouseOver: false };
     },
 
-    handleMouseOut: function( ) {
-        // console.log('<-' + this.props.model.urlid);
+    _getFallback: function( ) {
+        sketchfabDataApi.model.getFallback( this.props.model.uid ).then(( result ) => {
+            var fallback = null;
+            if ( result.images && result.images.length ) {
+                fallback = result.images.reduce( function( previous, current ) {
+                    if ( current.height === 180 ) {
+                        return current;
+                    } else {
+                        return previous;
+                    }
+                });
+            }
+            this.setState({ fallback: fallback });
+        });
+    },
+
+    handleMouseEnter: function( e ) {
+        if ( this.state.isMouseOver === false ) {
+            this.setState({ isMouseOver: true });
+            setTimeout( ( ) => {
+                if ( this.state.isMouseOver === true ) {
+                    this._getFallback( );
+                }
+            }, 1000 );
+        }
+    },
+
+    handleMouseLeave: function( e ) {
+        this.setState({ isMouseOver: false });
     },
 
     getAvatar: function( size ) {
@@ -39,11 +69,11 @@ var Model = React.createClass({
             }
         }
 
-        var fallbackUrl = this.props.model.fallback && this.props.model.fallback.url;
+        var fallbackUrl = this.state.fallback && this.state.fallback.url;
         var avatar = this.getAvatar( 32 );
 
         return (
-            <div data-uid={this.props.model.uid} className="grid-item" onClick={this.props.clickHandler} onMouseOver={this.props.mouseOverHandler} onMouseOut={this.handleMouseOut}>
+            <div data-uid={this.props.model.uid} className="grid-item" onClick={this.props.clickHandler} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                 <div className="modelcard" data-uid={this.props.model.uid}>
                     <a href={this.props.model.viewerUrl} target="_blank">
                         <div className="modelcard-preview" style={{

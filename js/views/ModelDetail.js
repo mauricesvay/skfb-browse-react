@@ -1,29 +1,25 @@
+import { connect } from 'react-redux';
 import React from 'react';
-import SketchfabDataApi from '../lib/api.js';
+import { requestModel } from '../actions/actions';
+import ModelDetail from '../components/ModelDetail';
 
-var sketchfabDataApi = new SketchfabDataApi( );
-
-let ModelDetail = React.createClass({
-
-    getInitialState( ) {
-        return { url: 'about:blank' };
-    },
-
-    componentWillMount( ) {
-        sketchfabDataApi.model.get( this.props.params.id ).then(( response ) => {
-            this.setState({
-                url: response.data.embedUrl + '?autostart=1'
-            });
-        });
-    },
-
-    render( ) {
-        return (
-            <div className="modelDetail">
-                <iframe src={this.state.url}></iframe>
-            </div>
-        );
+function mapStateToProps( state, ownProps ) {
+    var uid = ownProps.params.id;
+    return {
+        model: state.model[uid]
+            ? state.model[uid]
+            : null
     }
-});
+}
 
-module.exports = ModelDetail;
+function mapDispatchToProps( dispatch, ownProps ) {
+    return {
+        requestModel: ( uid ) => {
+            dispatch(requestModel( uid ))
+        }
+    }
+}
+
+const ModelDetailContainer = connect( mapStateToProps, mapDispatchToProps )( ModelDetail );
+
+module.exports = ModelDetailContainer;
