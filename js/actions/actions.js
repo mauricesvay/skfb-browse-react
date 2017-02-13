@@ -1,4 +1,3 @@
-import sketchfabSDK from '../lib/sketchfab.js';
 import SketchfabDataApi from '../lib/api.js';
 import Url from 'url';
 import User from '../User';
@@ -41,9 +40,8 @@ function getFeed( dispatch, query, offset = 0 ) {
     }
 
     isRequestPending[ key ] = true;
-    sketchfabSDK.Feed.all( User.getAccessToken(), {
-            offset
-        } )
+
+    sketchabDataApi.feed.get()
         .then( ( feed ) => {
             isRequestPending[ key ] = false;
             dispatch( {
@@ -231,7 +229,7 @@ module.exports = {
 
             if ( query.special ) {
                 if ( query.special === 'newsfeed' ) {
-                    getFeed( dispatch, query, offset );
+                    // getFeed( dispatch, query, offset );
                 } else if ( query.special === 'collection' ) {
                     getCollectionModels( dispatch, key, query, cursor );
                 }
@@ -265,6 +263,8 @@ module.exports = {
                         type: LOGIN_SUCCESS,
                         accessToken: grant.access_token
                     } );
+
+                    getFeed( dispatch, {}, 0);
                 } )
                 .catch( function ( error ) {
                     dispatch( {

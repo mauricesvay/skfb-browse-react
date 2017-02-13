@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "SketchfabSDK": "git://git@github.com:mauricesvay/sketchfab-js-sdk.git#d31b852a00330d5ce754635e8d211f90dc8599be",
     "axios": "^0.15.1",
     "cookie_js": "^1.1.1",
     "localforage": "^1.4.3",
