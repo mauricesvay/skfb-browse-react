@@ -12,7 +12,6 @@ let UserInfo = React.createClass({
         if (User.isConnected()) {
             return (
                 <div>
-                    <Link activeClassName="active" to="/newsfeed"><i className="icon ion-ios-person"></i> My feed</Link>
                     <button onClick={ (e)=>{
                         e.preventDefault();
                         this.context.router.push({pathname:'/'});

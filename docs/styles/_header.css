@@ -30,9 +30,9 @@
 }
 
 .userInfo {
-    display:none;
+    /*display:none;*/
     flex: auto;
-    /*display: flex;*/
+    display: flex;
     justify-content: flex-end;
     align-items: center;
     padding: 15px;

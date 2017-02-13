@@ -84,9 +84,10 @@ var defaultUserState = {
 function userReducer( state = defaultUserState, action ) {
     switch ( action.type ) {
         case LOGIN_SUCCESS:
+            console.info( action.accessToken );
             return { accessToken: action.accessToken };
         case LOGIN_ERROR:
-            console.log( 'Login error' );
+            console.error( 'Login error', action.error );
             return state;
         case LOGOUT:
             return { accessToken: '' };

@@ -59,12 +59,6 @@ let Sidebar = React.createClass({
                         <li className="item">
                             <Link activeClassName="active" to="/category/weapons">Weapons</Link>
                         </li>
-                        <li className="item">
-                            <Link activeClassName="active" to="/collection/3ddf30343428404d841bbf2e3cf97b8c">Contest (Animated)</Link>
-                        </li>
-                        <li className="item">
-                            <Link activeClassName="active" to="/collection/62d9cb513c2241e483bd2931a1e25bc2">Contest (Still)</Link>
-                        </li>
                     </ul>
                 </div>
             </div>
