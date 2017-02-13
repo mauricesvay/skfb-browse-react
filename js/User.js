@@ -1,7 +1,8 @@
 import {
     cookie
 } from 'cookie_js';
-import sketchfabSDK from './lib/sketchfab.js';
+import config from './config/config';
+import SketchfabOAuth2 from 'sketchfab-oauth2';
 
 module.exports = {
     isConnected() {
@@ -17,7 +18,8 @@ module.exports = {
     },
 
     connect() {
-        return sketchfabSDK.connect();
+        var client = new SketchfabOAuth2( config.oauth2 );
+        return client.connect();
     },
 
     logout() {
