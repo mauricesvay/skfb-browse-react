@@ -1,5 +1,9 @@
-import { connect } from 'react-redux';
-import { requestModels } from '../actions/actions';
+import {
+    connect
+} from 'react-redux';
+import {
+    requestModels
+} from '../actions/actions';
 import Grid from '../components/Grid';
 
 var query = {
@@ -10,21 +14,24 @@ var query = {
 var key = JSON.stringify( query );
 
 function mapStateToProps( state ) {
-    var models = state.models[key]
-        ? state.models[key].models
-        : [ ];
-    var isLoading = !!state.isLoading[key];
-    var nextCursor = state.models[key]
-        ? state.models[key].nextCursor
-        : '';
+    var models = state.models[ key ] ?
+        state.models[ key ].models.map( uid => state.allModels[ uid ] ) : [];
+    var isLoading = !!state.isLoading[ key ];
+    var nextCursor = state.models[ key ] ?
+        state.models[ key ].nextCursor :
+        '';
 
-    return { models, isLoading, nextCursor };
+    return {
+        models,
+        isLoading,
+        nextCursor
+    };
 }
 
 function mapDispatchToProps( dispatch ) {
     return {
         requestModels: ( cursor ) => {
-            dispatch(requestModels( key, query, cursor ))
+            dispatch( requestModels( key, query, cursor ) )
         }
     }
 }

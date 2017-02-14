@@ -1,4 +1,6 @@
-import { combineReducers } from 'redux';
+import {
+    combineReducers
+} from 'redux';
 import {
     FETCH_MODELS_SUCCESS,
     FETCH_MODELS_ERROR,
@@ -16,64 +18,89 @@ var _ = {
 
 function modelsReducer( state = {}, action ) {
     switch ( action.type ) {
-        case FETCH_MODELS_SUCCESS:
-            var newState = {
-                ...state
+    case FETCH_MODELS_SUCCESS:
+        var newState = {
+            ...state
+        };
+
+        var key = action.key;
+
+        if ( newState.hasOwnProperty( key ) ) {
+            newState[ key ] = {
+                // models: _.uniqBy( newState[ key ].models.concat( action.models ), m => m.uid ),
+                models: newState[ key ].models.concat( action.models.map( m => m.uid ) ),
+                nextCursor: action.nextCursor
             };
+        } else {
+            newState[ key ] = {
+                models: action.models.map( m => m.uid ),
+                nextCursor: action.nextCursor
+            }
+        }
 
-            var key = action.key;
+        return newState;
+    default:
+        return state;
+    }
+}
 
-            if (newState.hasOwnProperty( key )) {
-                newState[key] = {
-                    models: _.uniqBy( newState[key].models.concat( action.models ), m => m.uid ),
-                    nextCursor: action.nextCursor
+function allModelsReducer( state = {}, action ) {
+    switch ( action.type ) {
+    case FETCH_MODELS_SUCCESS:
+        var newState = {
+            ...state
+        };
+        var uid;
+        for ( var i = 0, l = action.models.length; i < l; i++ ) {
+            uid = action.models[ i ].uid;
+            if ( newState.hasOwnProperty( uid ) ) {
+                newState[ uid ] = {
+                    ...newState[ uid ],
+                    ...action.models[ i ]
                 };
             } else {
-                newState[key] = {
-                    models: action.models,
-                    nextCursor: action.nextCursor
-                }
+                newState[ uid ] = action.models[ i ];
             }
-
-            return newState;
-        default:
-            return state;
+        }
+        return newState;
+    default:
+        return state;
     }
 }
 
 function modelReducer( state = {}, action ) {
     switch ( action.type ) {
-        case FETCH_MODEL_SUCCESS:
-            var newState = {
-                ...state
-            };
-            var uid = action.uid;
-            newState[uid] = action.model;
-            return newState;
-        case FETCH_MODEL_ERROR:
-        default:
-            return state;
+    case FETCH_MODEL_SUCCESS:
+        var newState = {
+            ...state
+        };
+        var uid = action.uid;
+        newState[ uid ] = action.model;
+        return newState;
+    case FETCH_MODEL_ERROR:
+    default:
+        return state;
     }
 }
 
 function loadingReducer( state = {}, action ) {
     var key = JSON.stringify( action.query );
     switch ( action.type ) {
-        case FETCH_MODELS_SUCCESS:
-        case FETCH_MODELS_ERROR:
-            var newState = {
-                ...state
-            };
-            newState[key] = false;
-            return newState;
-        case FETCH_MODELS_REQUEST:
-            var newState = {
-                ...state
-            };
-            newState[key] = true;
-            return newState;
-        default:
-            return state;
+    case FETCH_MODELS_SUCCESS:
+    case FETCH_MODELS_ERROR:
+        var newState = {
+            ...state
+        };
+        newState[ key ] = false;
+        return newState;
+    case FETCH_MODELS_REQUEST:
+        var newState = {
+            ...state
+        };
+        newState[ key ] = true;
+        return newState;
+    default:
+        return state;
     }
 }
 
@@ -83,19 +110,29 @@ var defaultUserState = {
 
 function userReducer( state = defaultUserState, action ) {
     switch ( action.type ) {
-        case LOGIN_SUCCESS:
-            console.info( action.accessToken );
-            return { accessToken: action.accessToken };
-        case LOGIN_ERROR:
-            console.error( 'Login error', action.error );
-            return state;
-        case LOGOUT:
-            return { accessToken: '' };
-        default:
-            return state;
+    case LOGIN_SUCCESS:
+        console.info( action.accessToken );
+        return {
+            accessToken: action.accessToken
+        };
+    case LOGIN_ERROR:
+        console.error( 'Login error', action.error );
+        return state;
+    case LOGOUT:
+        return {
+            accessToken: ''
+        };
+    default:
+        return state;
     }
 }
 
-const MainReducer = combineReducers({ models: modelsReducer, model: modelReducer, isLoading: loadingReducer, user: userReducer });
+const MainReducer = combineReducers( {
+    models: modelsReducer,
+    model: modelReducer,
+    isLoading: loadingReducer,
+    user: userReducer,
+    allModels: allModelsReducer
+} );
 
 module.exports = MainReducer;
