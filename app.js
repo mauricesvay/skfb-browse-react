@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 
@@ -8,6 +8,7 @@ import User from './js/User';
 import Router from './js/config/routes';
 import reducers from './js/reducers/reducers';
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let store = createStore(
     reducers,
     {
@@ -15,9 +16,9 @@ let store = createStore(
             accessToken: User.getAccessToken()
         }
     },
-    applyMiddleware(
+    composeEnhancers(applyMiddleware(
         thunkMiddleware
-    )
+    ))
 );
 
 render(
