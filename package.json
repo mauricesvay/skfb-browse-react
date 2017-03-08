@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --progress --watch --config webpack.config.dev.js",
+    "build": "webpack -p --config webpack.config.js",
     "stats": "webpack --json > app.json && analyze-bundle-size app.json"
   },
   "author": "",
