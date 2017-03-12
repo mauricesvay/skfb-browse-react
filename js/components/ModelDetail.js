@@ -1,28 +1,30 @@
 import React from 'react';
 
-let ModelDetail = React.createClass({
-
-    getInitialState( ) {
-        return { url: 'about:blank' };
-    },
+class ModelDetail extends React.Component {
 
     componentWillMount( ) {
-        this.props['requestModel']( this.props.params.id );
-    },
-
-    componentWillReceiveProps( props ) {
-        if ( props.model ) {
-            this.setState({ model: props.model, url: props.model.embedUrl });
+        if ( !this.props.model ) {
+            this.props.requestModel( this.props.uid );
         }
-    },
+    }
 
     render( ) {
+
+        var url = this.props.model
+            ? this.props.model.embedUrl
+            : 'about:blank';
+
         return (
             <div className="modelDetail">
-                <iframe src={this.state.url}></iframe>
+                <iframe src={url}></iframe>
             </div>
         );
     }
-});
+}
+
+ModelDetail.propTypes = {
+    uid: React.PropTypes.string.isRequired,
+    model: React.PropTypes.object
+}
 
 module.exports = ModelDetail;

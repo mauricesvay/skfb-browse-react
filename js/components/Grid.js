@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactList from 'react-list';
 import { requestModels } from '../actions/actions';
-import Model from './Model';
+import Model from './ModelCard';
 var _ = {
     throttle: require( 'lodash/throttle' )
 };
@@ -10,21 +10,17 @@ var scrollTop = 0;
 
 let Grid = React.createClass({
 
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
-
     componentWillMount( ) {
         this.fetchModels( );
     },
 
     componentDidUpdate( prevProps, prevState ) {
-        if ( this.props.params.category != prevProps.params.category ) {
+        if ( this.props.match.params.category != prevProps.match.params.category ) {
             this.fetchModels( );
         }
-        if ( this.props.location.query.q != prevProps.location.query.q ) {
-            this.fetchModels( );
-        }
+        // if ( this.props.location.query.q != prevProps.location.query.q ) {
+        //     this.fetchModels( );
+        // }
     },
 
     fetchModels: function( ) {
@@ -56,12 +52,12 @@ let Grid = React.createClass({
         if (!( e.ctrlKey || e.metaKey )) {
             e.preventDefault( );
             var id = e.currentTarget.getAttribute( 'data-uid' );
-            this.context.router.push({
-                pathname: '/model/' + id,
-                state: {
-                    modal: true
-                }
-            });
+            // this.context.router.push({
+            //     pathname: '/model/' + id,
+            //     state: {
+            //         modal: true
+            //     }
+            // });
         }
     },
     renderItem( index/*, key*/) {

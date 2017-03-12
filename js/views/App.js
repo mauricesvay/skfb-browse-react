@@ -1,71 +1,67 @@
-import React from 'react';
-import {Link} from 'react-router';
+import React from 'react'
+import { Switch, Route, NavLink } from 'react-router-dom'
 
 import Sidebar from '../components/Sidebar';
-import Modal from '../components/Modal';
 import SearchForm from '../components/SearchForm';
 import UserInfo from '../components/UserInfoContainer';
 
-let App = React.createClass({
+import Staffpicks from './Staffpicks';
+import Popular from './Popular';
+import Recent from './Recent';
+import Search from './Search';
+import Category from './Category';
+import Collection from './Collection';
+import ModelDetail from './ModelDetail';
 
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
+import Modal from '../components/Modal';
 
-    childContextTypes: {
-        router: React.PropTypes.object
-    },
+class App extends React.Component {
 
-    getChildContext: function() {
-        return {router: this.context.router};
-    },
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.location.key !== this.props.location.key) {
-            if (nextProps.location.state && nextProps.location.state.modal) {
-                this.previousChildren = this.props.children;
-            }
+    componentWillUpdate( nextProps ) {
+        const { location } = this.props
+        if (nextProps.history.action !== 'POP' && ( !location.state || !location.state.modal )) {
+            this.previousLocation = this.props.location
         }
-    },
+    }
 
-    render() {
+    render( ) {
 
-        let {location} = this.props;
+        const { location } = this.props;
+        const isModal = !!( location.state && location.state.modal && this.previousLocation !== location );
 
-        let isModal = (location.state && location.state.modal && this.previousChildren);
-
-        return (
-            <div className="app">
-                <header className="header">
-                    <div className="logo">
-                        <Link to="/"><img src="assets/img/logo-sketchfab-white.png" width="140"/></Link>
-                    </div>
-                    <div className="toolbar">
-                        <SearchForm></SearchForm>
-                        <div className="userInfo">
-                            <UserInfo></UserInfo>
-                        </div>
-                    </div>
-                </header>
-                <div className="main">
-                    <Sidebar/>
-                    <div className="content">
-                        {isModal
-                            ? this.previousChildren
-                            : this.props.children
-}
+        return <div className="app">
+            <header className="header">
+                <div className="logo">
+                    <NavLink to="/"><img src="assets/img/logo-sketchfab-white.png" width="140"/></NavLink>
+                </div>
+                <div className="toolbar">
+                    <SearchForm></SearchForm>
+                    <div className="userInfo">
+                        <UserInfo></UserInfo>
                     </div>
                 </div>
-                {isModal && (
-                    <Modal isOpen={true} onExit={() => {
-                        this.context.router.goBack();
-                    }}>
-                        {this.props.children}
-                    </Modal>
-                )}
+            </header>
+            <div className="main">
+                <Sidebar/>
+                <div className="content">
+                    <Switch location={isModal
+                        ? this.previousLocation
+                        : location}>
+                        <Route path="/staffpicks" component={Staffpicks}/>
+                        <Route path="/popular" component={Popular}/>
+                        <Route path="/recent" component={Recent}/>
+                        <Route path="/search" component={Search}/>
+                        <Route path="/category/:category" component={Category}/>
+                        <Route path="/collection/:id" component={Collection}/>
+                        <Route path='/model/:id' component={ModelDetail}/>
+                    </Switch>
+                </div>
             </div>
-        );
+            {isModal
+                ? <Route path='/model/:id' component={Modal}/>
+                : null}
+        </div>;
     }
-});
+}
 
-module.exports = App;
+export default App;

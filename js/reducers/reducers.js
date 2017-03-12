@@ -63,21 +63,13 @@ function allModelsReducer( state = {}, action ) {
             }
         }
         return newState;
-    default:
-        return state;
-    }
-}
-
-function modelReducer( state = {}, action ) {
-    switch ( action.type ) {
     case FETCH_MODEL_SUCCESS:
-        var newState = {
-            ...state
-        };
         var uid = action.uid;
-        newState[ uid ] = action.model;
+        var newState = {
+            ...state,
+            [ uid ]: action.model
+        }
         return newState;
-    case FETCH_MODEL_ERROR:
     default:
         return state;
     }
@@ -129,7 +121,6 @@ function userReducer( state = defaultUserState, action ) {
 
 const MainReducer = combineReducers( {
     models: modelsReducer,
-    model: modelReducer,
     isLoading: loadingReducer,
     user: userReducer,
     allModels: allModelsReducer

@@ -1,5 +1,6 @@
 import React from 'react';
 import SketchfabDataApi from '../lib/api';
+import { Link } from 'react-router-dom';
 var _ = {
     sortBy: require( 'lodash/sortBy' )
 };
@@ -75,7 +76,13 @@ var Model = React.createClass({
         return (
             <div data-uid={this.props.model.uid} className="grid-item" onClick={this.props.clickHandler} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                 <div className="modelcard" data-uid={this.props.model.uid}>
-                    <a href={this.props.model.viewerUrl} target="_blank">
+                    <Link to={{
+                        pathname: `/model/${ this.props.model.uid }`,
+                        state: {
+                            modal: true
+                        }
+                    }}>
+                        {/* <a href={this.props.model.viewerUrl} target="_blank"> */}
                         <div className="modelcard-preview" style={{
                             backgroundImage: 'url(' + preview + ')'
                         }}>
@@ -111,7 +118,8 @@ var Model = React.createClass({
                                 by {this.props.model.user.displayName}
                             </span>
                         </div>
-                    </a>
+                        {/*</a>*/}
+                    </Link>
                 </div>
             </div>
         );

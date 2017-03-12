@@ -1,24 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 let Sidebar = ( props ) => (
     <div className="sidebar">
         <div className="navigation-main section animated fadeInLeft">
             <ul className="sidebar-menu">
                 <li className="item">
-                    <Link activeClassName="active" to="/staffpicks">
+                    <NavLink activeClassName="active" to="/staffpicks">
                         <i className="icon ion-ios-heart"></i>
-                        Staffpicks</Link>
+                        Staffpicks</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/popular">
+                    <NavLink activeClassName="active" to="/popular">
                         <i className="icon ion-connection-bars"></i>
-                        Popular</Link>
+                        Popular</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/recent">
+                    <NavLink activeClassName="active" to="/recent">
                         <i className="icon ion-ios-clock"></i>
-                        Recent</Link>
+                        Recent</NavLink>
                 </li>
             </ul>
         </div>
@@ -28,34 +28,34 @@ let Sidebar = ( props ) => (
             </h2>
             <ul className="categories sidebar-menu">
                 <li className="item">
-                    <Link activeClassName="active" to="/category/animals-creatures">Animals & creatures</Link>
+                    <NavLink activeClassName="active" to="/category/animals-creatures">Animals & creatures</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/architecture">Architecture</Link>
+                    <NavLink activeClassName="active" to="/category/architecture">Architecture</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/cars-vehicles">Cars & Vehicles</Link>
+                    <NavLink activeClassName="active" to="/category/cars-vehicles">Cars & Vehicles</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/characters">Characters</Link>
+                    <NavLink activeClassName="active" to="/category/characters">Characters</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/cultural-heritage">Cultural Heritage</Link>
+                    <NavLink activeClassName="active" to="/category/cultural-heritage">Cultural Heritage</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/gaming">Gaming</Link>
+                    <NavLink activeClassName="active" to="/category/gaming">Gaming</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/places-scenes">Places & Scenes</Link>
+                    <NavLink activeClassName="active" to="/category/places-scenes">Places & Scenes</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/products-technology">Products & Technology</Link>
+                    <NavLink activeClassName="active" to="/category/products-technology">Products & Technology</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/science-nature-education">Science, Nature & Education</Link>
+                    <NavLink activeClassName="active" to="/category/science-nature-education">Science, Nature & Education</NavLink>
                 </li>
                 <li className="item">
-                    <Link activeClassName="active" to="/category/weapons">Weapons</Link>
+                    <NavLink activeClassName="active" to="/category/weapons">Weapons</NavLink>
                 </li>
             </ul>
         </div>

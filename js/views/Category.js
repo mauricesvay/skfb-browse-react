@@ -8,7 +8,7 @@ import Grid from '../components/Grid';
 
 function mapStateToProps( state, ownProps ) {
     var query = {
-        'categories': ownProps.params.category,
+        'categories': ownProps.match.params.category,
         'sort_by': '-createdAt',
         'count': 24
     };
@@ -31,7 +31,7 @@ function mapDispatchToProps( dispatch, ownProps ) {
     return {
         requestModels: ( cursor ) => {
             var query = {
-                'categories': ownProps.params.category,
+                'categories': ownProps.match.params.category,
                 'sort_by': '-createdAt',
                 'count': 24
             };

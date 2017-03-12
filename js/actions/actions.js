@@ -264,7 +264,7 @@ module.exports = {
                         accessToken: grant.access_token
                     } );
 
-                    getFeed( dispatch, {}, 0);
+                    // getFeed( dispatch, {}, 0);
                 } )
                 .catch( function ( error ) {
                     dispatch( {

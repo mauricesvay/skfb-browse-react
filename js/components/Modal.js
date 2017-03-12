@@ -1,12 +1,21 @@
 import React from 'react';
+import ModelDetail from '../views/ModelDetail';
 
-const Modal = ( props ) => (
-    <div className="popup-container">
-        <div className="popup-overlay" onClick={props.onExit}></div>
-        <div className="popup-model">
-            {props.children}
+const Modal = ({ match, history }) => {
+    const back = ( e ) => {
+        e.stopPropagation( );
+        history.goBack( );
+    };
+
+    return (
+        <div className="popup-container">
+            <div className="popup-overlay" onClick={back}></div>
+            <div className="popup-model">
+                <ModelDetail match={match}></ModelDetail>
+            </div>
+            <button onClick={back}>x</button>
         </div>
-    </div>
-);
+    );
+};
 
 export default Modal;

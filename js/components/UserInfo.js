@@ -1,21 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import User from '../User';
 
-let UserInfo = React.createClass({
+class UserInfo extends React.Component {
 
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
-
-    render() {
-        if (User.isConnected()) {
+    render( ) {
+        if (User.isConnected( )) {
             return (
                 <div>
-                    <button onClick={ (e)=>{
-                        e.preventDefault();
-                        this.context.router.push({pathname:'/'});
-                        this.props.onLogoutClick(e);
+                    <button onClick={( e ) => {
+                        e.preventDefault( );
+                        this.props.onLogoutClick( e );
                     }}>Logout</button>
                 </div>
             )
@@ -23,6 +18,11 @@ let UserInfo = React.createClass({
             return <a onClick={this.props.onLoginClick}>Login</a>
         }
     }
-});
+}
+
+UserInfo.propTypes = {
+    onLoginClick: React.PropTypes.func.isRequired,
+    onLogoutClick: React.PropTypes.func.isRequired
+}
 
 module.exports = UserInfo;

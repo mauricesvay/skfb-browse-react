@@ -4,10 +4,12 @@ import { requestModel } from '../actions/actions';
 import ModelDetail from '../components/ModelDetail';
 
 function mapStateToProps( state, ownProps ) {
-    var uid = ownProps.params.id;
+    console.log( 'ModelDetails', state );
+    var uid = ownProps.match.params.id;
     return {
-        model: state.model[uid]
-            ? state.model[uid]
+        uid: uid,
+        model: state.allModels[uid]
+            ? state.allModels[uid]
             : null
     }
 }
