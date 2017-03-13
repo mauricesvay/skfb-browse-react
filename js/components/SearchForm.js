@@ -1,36 +1,42 @@
 import React from 'react';
+import qs from 'qs';
 
 var SearchForm = React.createClass({
 
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
-
-    getInitialState() {
+    getInitialState( ) {
+        var queryString = qs.parse(this.props.location.search.substr( 1 ));
         return {
-            q: ''
+            q: queryString.q || ''
         };
     },
-
-    onSearch(e) {
-        e.preventDefault();
-        this.context.router.push({pathname:'/search', query:{q: this.state.q}});
+    componentWillUpdate( nextProps, nextState ) {
+        // Clear search field when leaving search
+        if ( this.props.location.pathname === '/search' && nextProps.location.pathname !== '/search' ) {
+            this.setState({ q: '' });
+        }
     },
-
-    onSearchChange(e) {
-        this.setState({q: e.target.value});
-        if (e.target.value.indexOf('#') === 0) {
+    onSearch( e ) {
+        e.preventDefault( );
+        this.props.history.push({
+            pathname: '/search',
+            search: 'q=' + encodeURIComponent( this.state.q )
+        });
+    },
+    onSearchChange( e ) {
+        this.setState({ q: e.target.value });
+        if ( e.target.value.indexOf( '#' ) === 0 ) {
             //console.log('Tag search');
         }
     },
-
-    render() {
+    render( ) {
         return (
             <form action="" method="GET" onSubmit={this.onSearch} className="toolbar-tool">
                 <div className="search">
                     <label htmlFor="q">Search</label>
                     <input type="search" className="search-field" id="q" name="q" value={this.state.q} onChange={this.onSearchChange}/>
-                    <button type="submit" className="search-btn"><i className="icon ion-search"></i></button>
+                    <button type="submit" className="search-btn">
+                        <i className="icon ion-search"></i>
+                    </button>
                 </div>
             </form>
         );

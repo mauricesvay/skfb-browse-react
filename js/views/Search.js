@@ -4,16 +4,20 @@ import {
 import {
     requestModels
 } from '../actions/actions';
+import qs from 'qs';
 import Grid from '../components/Grid';
 
 function mapStateToProps( state, ownProps ) {
+    var queryParams = qs.parse( ownProps.location.search.substr( 1 ) );
+    var q = queryParams.q || '';
+
     var query = {
-        search: ownProps.location.query.q
+        q: q,
+        special: 'search'
     };
     var key = JSON.stringify( query );
     var models = state.models[ key ] ?
-        state.models[ key ].models.map( uid => state.allModels[ uid ] ) :
-        [];
+        state.models[ key ].models.map( uid => state.allModels[ uid ] ) : [];
     var isLoading = !!state.isLoading[ key ];
     var nextCursor = state.models[ key ] ?
         state.models[ key ].nextCursor :
@@ -23,16 +27,22 @@ function mapStateToProps( state, ownProps ) {
         models,
         isLoading,
         nextCursor
-    };
+    }
 }
 
 function mapDispatchToProps( dispatch, ownProps ) {
+
+    var queryParams = qs.parse( ownProps.location.search.substr( 1 ) );
+    var q = queryParams.q || '';
+
     var query = {
-        search: ownProps.location.query.q
+        q: q,
+        special: 'search'
     };
+    var key = JSON.stringify( query );
     return {
-        requestModels: ( offset ) => {
-            dispatch( requestModels( query, offset ) )
+        requestModels: ( cursor ) => {
+            dispatch( requestModels( key, query, cursor ) )
         }
     }
 }

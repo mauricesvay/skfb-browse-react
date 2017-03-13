@@ -35,7 +35,7 @@ class App extends React.Component {
                     <NavLink to="/"><img src="assets/img/logo-sketchfab-white.png" width="140"/></NavLink>
                 </div>
                 <div className="toolbar">
-                    <SearchForm></SearchForm>
+                    <Route component={SearchForm}></Route>
                     <div className="userInfo">
                         <UserInfo></UserInfo>
                     </div>

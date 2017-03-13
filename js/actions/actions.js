@@ -1,3 +1,4 @@
+import qs from 'qs';
 import SketchfabDataApi from '../lib/api.js';
 import Url from 'url';
 import User from '../User';
@@ -204,6 +205,46 @@ function getModel( dispatch, uid ) {
 
 }
 
+function search( dispatch, key, query, cursor ) {
+
+    if ( isRequestPending[ key ] ) {
+        console.info( 'search: already requesting', query.q );
+        return;
+    }
+
+    console.info( 'search:', query.q );
+    isRequestPending[ key ] = true;
+    sketchabDataApi.models.search( {
+        q: query.q,
+        type: 'models',
+        cursor: cursor
+    } ).then( ( response ) => {
+
+        isRequestPending[ key ] = false;
+        var nextCursor = '';
+        if ( response.next ) {
+            var queryString = qs.parse( response.next.substr( response.next.indexOf( '?' ) + 1 ) );
+            nextCursor = queryString.cursor || '';
+        }
+
+        dispatch( {
+            type: FETCH_MODELS_SUCCESS,
+            key: key,
+            query: query,
+            models: response.results,
+            nextCursor: nextCursor
+        } );
+    } ).catch( () => {
+
+        isRequestPending[ key ] = false;
+        dispatch( {
+            type: FETCH_MODELS_ERROR,
+            key: key,
+            query: query
+        } );
+    } );
+}
+
 module.exports = {
     FETCH_MODELS_REQUEST: FETCH_MODELS_REQUEST,
     FETCH_MODELS_SUCCESS: FETCH_MODELS_SUCCESS,
@@ -228,10 +269,16 @@ module.exports = {
             } );
 
             if ( query.special ) {
-                if ( query.special === 'newsfeed' ) {
+                switch ( query.special ) {
+                case 'newsfeed':
                     // getFeed( dispatch, query, offset );
-                } else if ( query.special === 'collection' ) {
+                    break;
+                case 'collection':
                     getCollectionModels( dispatch, key, query, cursor );
+                    break;
+                case 'search':
+                    search( dispatch, key, query, cursor );
+                    break;
                 }
             } else {
                 getModels( dispatch, key, query, cursor );

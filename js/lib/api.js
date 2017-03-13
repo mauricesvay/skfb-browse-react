@@ -1,10 +1,11 @@
 var axios = require( 'axios' );
 var querystring = require( 'querystring' );
 var localforage = require( 'localforage' );
-var User = require('../User');
+var User = require( '../User' );
 
 var BASE_URL = 'https://api.sketchfab.com';
 var MODELS_ENDPOINT = '/v3/models';
+var SEARCH_ENDPOINT = '/v3/search';
 var COLLECTIONS_ENDPOINT = '/v3/collections';
 var FEED_ENDPOINT = '/i/feeds';
 
@@ -90,6 +91,12 @@ SketchfabDataApi.prototype = {
             var qs = querystring.stringify( query );
             var url = BASE_URL + MODELS_ENDPOINT + '?' + qs;
             return apiGet( url );
+        },
+
+        search: function ( query ) {
+            var qs = querystring.stringify( query );
+            var url = BASE_URL + SEARCH_ENDPOINT + '?' + qs;
+            return apiGet( url );
         }
     },
 
@@ -102,13 +109,13 @@ SketchfabDataApi.prototype = {
     },
 
     feed: {
-        get: function() {
+        get: function () {
             if ( !User.isConnected() ) {
-                console.error('No feed for anonymous users');
+                console.error( 'No feed for anonymous users' );
                 return;
             }
 
-            var instance = axios.create({
+            var instance = axios.create( {
                 baseURL: BASE_URL,
                 headers: {
                     'Authorization': 'Bearer ' + User.getAccessToken()

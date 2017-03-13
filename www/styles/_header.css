@@ -19,10 +19,6 @@
     padding: 15px 20px;
 }
 
-.search {
-    visibility: hidden;
-}
-
 .search label {
     color: #888;
     font-size: 0.8rem;
