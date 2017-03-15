@@ -1,25 +1,30 @@
-import { connect } from 'react-redux';
-import {requestLogin, requestLogout} from '../actions/actions';
+import {
+    connect
+} from 'react-redux';
+import {
+    requestLogin,
+    requestLogout
+} from '../actions/user';
 import UserInfo from './UserInfo';
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps( state, ownProps ) {
     return {
         user: state.user
     };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps( dispatch, ownProps ) {
     return {
-        onLoginClick: (e) => {
+        onLoginClick: ( e ) => {
             e.preventDefault();
-            dispatch(requestLogin());
+            dispatch( requestLogin() );
         },
-        onLogoutClick: (e) => {
-            dispatch(requestLogout());
+        onLogoutClick: ( e ) => {
+            dispatch( requestLogout() );
         }
     }
 }
 
-const UserInfoContainer = connect(mapStateToProps, mapDispatchToProps)(UserInfo);
+const UserInfoContainer = connect( mapStateToProps, mapDispatchToProps )( UserInfo );
 
 module.exports = UserInfoContainer;
