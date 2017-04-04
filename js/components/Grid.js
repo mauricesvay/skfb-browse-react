@@ -52,12 +52,14 @@ let Grid = React.createClass({
         if (!( e.ctrlKey || e.metaKey )) {
             e.preventDefault( );
             var id = e.currentTarget.getAttribute( 'data-uid' );
-            // this.context.router.push({
-            //     pathname: '/model/' + id,
-            //     state: {
-            //         modal: true
-            //     }
-            // });
+
+            console.log(this.props);
+            this.props.history.push({
+                pathname: `/model/${ id }`,
+                state: {
+                    modal: true
+                }
+            });
         }
     },
     renderItem( index/*, key*/) {
