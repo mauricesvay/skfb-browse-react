@@ -33,6 +33,8 @@
     }
     .sidebar-menu .icon {
         margin-right: 6px;
+        fill: white;
+        vertical-align: bottom;
     }
     .sidebar-menu a {
         display: block;
