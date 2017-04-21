@@ -7,13 +7,17 @@ var _ = {
 
 const sketchfabDataApi = new SketchfabDataApi( );
 
-var Model = React.createClass({
+class Model extends React.Component {
 
-    getInitialState: function( ) {
-        return { fallback: null, isMouseOver: false };
-    },
+    constructor( ) {
+        super( );
+        this.state = {
+            fallback: null,
+            isMouseOver: false
+        };
+    }
 
-    _getFallback: function( ) {
+    _getFallback( ) {
         sketchfabDataApi.model.getFallback( this.props.model.uid ).then(( result ) => {
             var fallback = null;
             if ( result.images && result.images.length ) {
@@ -27,9 +31,9 @@ var Model = React.createClass({
             }
             this.setState({ fallback: fallback });
         });
-    },
+    }
 
-    handleMouseEnter: function( e ) {
+    handleMouseEnter( e ) {
         if ( this.state.isMouseOver === false ) {
             this.setState({ isMouseOver: true });
             setTimeout( ( ) => {
@@ -38,13 +42,13 @@ var Model = React.createClass({
                 }
             }, 1000 );
         }
-    },
+    }
 
-    handleMouseLeave: function( e ) {
+    handleMouseLeave( e ) {
         this.setState({ isMouseOver: false });
-    },
+    }
 
-    getAvatar: function( size ) {
+    getAvatar( size ) {
 
         var avatar = '';
 
@@ -57,9 +61,9 @@ var Model = React.createClass({
         }
 
         return avatar;
-    },
+    }
 
-    render: function( ) {
+    render( ) {
 
         var images = _.sortBy( this.props.model.thumbnails.images, 'width' );
         var preview;
@@ -74,7 +78,7 @@ var Model = React.createClass({
         var avatar = this.getAvatar( 32 );
 
         return (
-            <div data-uid={this.props.model.uid} className="grid-item" onClick={this.props.clickHandler} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+            <div data-uid={this.props.model.uid} className="grid-item" onClick={this.props.clickHandler} onMouseEnter={this.handleMouseEnter.bind( this )} onMouseLeave={this.handleMouseLeave.bind( this )}>
                 <div className="modelcard" data-uid={this.props.model.uid}>
                     <a href={this.props.model.viewerUrl} target="_blank">
                         <div className="modelcard-preview" style={{
@@ -117,6 +121,6 @@ var Model = React.createClass({
             </div>
         );
     }
-});
+};
 
-module.exports = Model;
+export default Model;
