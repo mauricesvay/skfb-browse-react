@@ -66,7 +66,7 @@ class Grid extends React.Component {
     renderItem( index/*, key*/) {
         var model = this.props.models[index];
         return (
-            <Model key={model.uid} model={model} clickHandler={this.handleModelClick}></Model>
+            <Model key={model.uid} model={model} clickHandler={this.handleModelClick.bind( this )}></Model>
         );
     }
 
@@ -84,7 +84,7 @@ class Grid extends React.Component {
                 color: 'white',
                 textAlign: 'center',
                 padding: '10px'
-            }} onClick={this.loadMore}>Load more</div>;
+            }} onClick={this.loadMore.bind( this )}>Load more</div>;
         }
     }
 
