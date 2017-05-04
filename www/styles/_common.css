@@ -177,7 +177,9 @@ a {
             opacity: .7;
         }
         .meta .icon {
-            font-size: 16px;
+            fill: #fff;
+            vertical-align: top;
+            margin-right: 2px;
         }
     .modelcard-info {
         position: absolute;
