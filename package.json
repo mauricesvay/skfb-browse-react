@@ -8,7 +8,9 @@
     "copy": "rm -rf docs/*; cp -R www/* docs",
     "watch": "npm run copy; webpack --progress --watch --config webpack.config.dev.js",
     "build": "npm run copy; webpack -p --config webpack.config.js",
-    "stats": "webpack --json > app.json && analyze-bundle-size app.json"
+    "stats": "webpack --json > app.json && analyze-bundle-size app.json",
+    "serve": "cd docs; serve",
+    "start": "concurrently 'npm run watch' 'npm run serve'"
   },
   "author": "",
   "license": "ISC",
@@ -30,10 +32,12 @@
   "devDependencies": {
     "babel-core": "^5.8.23",
     "babel-loader": "^5.3.2",
+    "concurrently": "^3.4.0",
     "eslint-config-standard": "^4.4.0",
     "eslint-plugin-react": "^3.16.1",
     "eslint-plugin-standard": "^1.3.1",
     "script-loader": "^0.6.1",
+    "serve": "^5.2.1",
     "webpack": "^1.12.0"
   }
 }
