@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, NavLink } from 'react-router-dom'
+import { Switch, Redirect, Route, NavLink } from 'react-router-dom'
 
 import Sidebar from '../components/Sidebar';
 import SearchForm from '../components/SearchForm';
@@ -54,6 +54,7 @@ class App extends React.Component {
                         <Route path="/category/:category" component={Category}/>
                         <Route path="/collection/:id" component={Collection}/>
                         <Route path='/model/:id' component={ModelDetail}/>
+                        <Route exact path="/" render={( ) => ( <Redirect to="/staffpicks"/> )}/>
                     </Switch>
                 </div>
             </div>
