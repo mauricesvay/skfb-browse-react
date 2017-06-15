@@ -1,28 +1,10 @@
-var webpack = require('webpack');
-var path = require('path');
+var webpack = require( 'webpack' );
+var config = require( './webpack.config.js' );
 
-module.exports = {
-    devtool: 'cheap-module-source-map',
-    entry: "./app.js",
-    output: {
-        path: path.join(__dirname, 'docs'),
-        filename: "app.bundle.js"
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel'
-            }
-        ]
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {NODE_ENV: '"development"'}
-        }),
-        new webpack.EnvironmentPlugin([
-            "NODE_ENV"
-        ])
-    ]
-};
+config.plugins = [
+    new webpack.EnvironmentPlugin( {
+        NODE_ENV: 'development'
+    } )
+];
+
+module.exports = config;

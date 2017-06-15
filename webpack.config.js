@@ -1,28 +1,28 @@
-var webpack = require('webpack');
-var path = require('path');
+var webpack = require( 'webpack' );
+var path = require( 'path' );
 
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: "./app.js",
     output: {
-        path: path.join(__dirname, 'docs'),
+        path: path.join( __dirname, 'docs' ),
         filename: "app.bundle.js"
     },
     module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel'
-            }
-        ]
+        rules: [ {
+            test: /\.jsx?$/,
+            exclude: /(node_modules|bower_components)/,
+            use: [ {
+                loader: 'babel-loader',
+                options: {
+                    presets: [ 'stage-3', 'env', 'react' ]
+                }
+            } ]
+        } ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {NODE_ENV: '"production"'}
-        }),
-        new webpack.EnvironmentPlugin([
-            "NODE_ENV"
-        ])
+        new webpack.EnvironmentPlugin( {
+            NODE_ENV: 'production'
+        } )
     ]
 };
