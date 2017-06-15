@@ -2,7 +2,7 @@ var webpack = require( 'webpack' );
 var path = require( 'path' );
 
 module.exports = {
-    devtool: 'cheap-module-source-map',
+    devtool: 'cheap-source-map',
     entry: "./app.js",
     output: {
         path: path.join( __dirname, 'docs' ),
