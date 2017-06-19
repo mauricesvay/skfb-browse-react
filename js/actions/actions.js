@@ -2,9 +2,6 @@ import qs from 'qs';
 import SketchfabDataApi from '../lib/api.js';
 import Url from 'url';
 import User from '../User';
-var _ = {
-    clone: require( 'lodash/clone' )
-};
 
 var sketchabDataApi = new SketchfabDataApi();
 
@@ -18,45 +15,11 @@ const FETCH_MODEL_ERROR = 'FETCH_MODEL_ERROR';
 
 var isRequestPending = {};
 
-function getFeed( dispatch, query, offset = 0 ) {
-    let key = JSON.stringify( query );
-
-    if ( !User.isConnected() ) {
-        console.log( 'User is not connected' );
-        dispatch( {
-            type: FETCH_MODELS_ERROR,
-            query: query
-        } );
-    }
-
-    if ( isRequestPending[ key ] ) {
-        console.info( 'getFeed: already requesting' );
-        return;
-    }
-
-    isRequestPending[ key ] = true;
-
-    sketchabDataApi.feed.get()
-        .then( ( feed ) => {
-            isRequestPending[ key ] = false;
-            dispatch( {
-                type: FETCH_MODELS_SUCCESS,
-                query: query,
-                models: feed.results
-            } );
-        } )
-        .catch( ( error ) => {
-            isRequestPending[ key ] = false;
-            console.error( 'getFeed: error', error );
-            dispatch( {
-                type: FETCH_MODELS_ERROR,
-                query: query
-            } );
-        } );
-}
-
 function getCollectionModels( dispatch, key, query, cursor ) {
-    var requestQuery = _.clone( query );
+    let requestQuery = {
+        ...query
+    };
+
     if ( cursor ) {
         requestQuery.cursor = cursor;
     }
@@ -114,7 +77,10 @@ function getCollectionModels( dispatch, key, query, cursor ) {
 
 function getModels( dispatch, key, query, cursor ) {
 
-    var requestQuery = _.clone( query );
+    let requestQuery = {
+        ...query
+    };
+
     if ( cursor ) {
         requestQuery.cursor = cursor;
     }
@@ -259,9 +225,6 @@ module.exports = {
 
             if ( query.special ) {
                 switch ( query.special ) {
-                case 'newsfeed':
-                    // getFeed( dispatch, query, offset );
-                    break;
                 case 'collection':
                     getCollectionModels( dispatch, key, query, cursor );
                     break;

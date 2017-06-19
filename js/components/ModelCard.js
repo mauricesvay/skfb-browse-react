@@ -1,51 +1,56 @@
 import React from 'react';
 import SketchfabDataApi from '../lib/api';
-import { Link } from 'react-router-dom';
-var _ = {
-    sortBy: require( 'lodash/sortBy' )
-};
+import {
+    Link
+} from 'react-router-dom';
 
-const sketchfabDataApi = new SketchfabDataApi( );
+const sketchfabDataApi = new SketchfabDataApi();
 
 class Model extends React.Component {
 
-    constructor( ) {
-        super( );
+    constructor() {
+        super();
         this.state = {
             fallback: null,
             isMouseOver: false
         };
     }
 
-    _getFallback( ) {
-        sketchfabDataApi.model.getFallback( this.props.model.uid ).then(( result ) => {
+    _getFallback() {
+        sketchfabDataApi.model.getFallback( this.props.model.uid ).then( ( result ) => {
             var fallback = null;
             if ( result.images && result.images.length ) {
-                fallback = result.images.reduce( function( previous, current ) {
+                fallback = result.images.reduce( function ( previous, current ) {
                     if ( current.height === 180 ) {
                         return current;
                     } else {
                         return previous;
                     }
-                });
+                } );
             }
-            this.setState({ fallback: fallback });
-        });
+            this.setState( {
+                fallback: fallback
+            } );
+        } );
     }
 
     handleMouseEnter( e ) {
         if ( this.state.isMouseOver === false ) {
-            this.setState({ isMouseOver: true });
-            setTimeout( ( ) => {
+            this.setState( {
+                isMouseOver: true
+            } );
+            setTimeout( () => {
                 if ( this.state.isMouseOver === true ) {
-                    this._getFallback( );
+                    this._getFallback();
                 }
             }, 1000 );
         }
     }
 
     handleMouseLeave( e ) {
-        this.setState({ isMouseOver: false });
+        this.setState( {
+            isMouseOver: false
+        } );
     }
 
     getAvatar( size ) {
@@ -54,8 +59,8 @@ class Model extends React.Component {
 
         var images = this.props.model.user.avatar.images;
         for ( var i = 0; i < images.length; i++ ) {
-            avatar = images[i].url;
-            if ( images[i].width == size ) {
+            avatar = images[ i ].url;
+            if ( images[ i ].width == size ) {
                 break;
             }
         }
@@ -63,13 +68,16 @@ class Model extends React.Component {
         return avatar;
     }
 
-    render( ) {
+    render() {
 
-        var images = _.sortBy( this.props.model.thumbnails.images, 'width' );
+        var images = [ ...this.props.model.thumbnails.images ].sort( function ( a, b ) {
+            return a.width - b.width;
+        } );
+
         var preview;
         for ( var j = 0; j < images.length; j++ ) {
-            preview = images[j].url;
-            if ( images[j].width >= 400 ) {
+            preview = images[ j ].url;
+            if ( images[ j ].width >= 400 ) {
                 break;
             }
         }

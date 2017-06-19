@@ -13,7 +13,6 @@ function modelsReducer( state = {}, action ) {
 
         if ( newState.hasOwnProperty( key ) ) {
             newState[ key ] = {
-                // models: _.uniqBy( newState[ key ].models.concat( action.models ), m => m.uid ),
                 models: newState[ key ].models.concat( action.models.map( m => m.uid ) ),
                 nextCursor: action.nextCursor
             };
