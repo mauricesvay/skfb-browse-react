@@ -40,34 +40,58 @@ let Sidebar = ( props ) => (
             </h2>
             <ul className="categories sidebar-menu">
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/animals-creatures">Animals & creatures</NavLink>
+                    <NavLink activeClassName="active" to="/category/animals-pets">Animals &amp; Pets</NavLink>
                 </li>
                 <li className="item">
                     <NavLink activeClassName="active" to="/category/architecture">Architecture</NavLink>
                 </li>
                 <li className="item">
+                    <NavLink activeClassName="active" to="/category/art-abstract">Art &amp; Abstract</NavLink>
+                </li>
+                <li className="item">
                     <NavLink activeClassName="active" to="/category/cars-vehicles">Cars & Vehicles</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/characters">Characters</NavLink>
+                    <NavLink activeClassName="active" to="/category/characters-creatures">Characters &amp; Creatures</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/cultural-heritage">Cultural Heritage</NavLink>
+                    <NavLink activeClassName="active" to="/category/cultural-heritage-history">Cultural Heritage &amp; History</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/electronics-gadgets">Electronics &amp; Gadgets</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/fashion-style">Fashion &amp; Style</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/food-drink">Food &amp; Drink</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/furniture-home">Furniture &amp; Home</NavLink>
                 </li>
                 <li className="item">
                     <NavLink activeClassName="active" to="/category/gaming">Gaming</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/places-scenes">Places & Scenes</NavLink>
+                    <NavLink activeClassName="active" to="/category/music">Music</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/products-technology">Products & Technology</NavLink>
+                    <NavLink activeClassName="active" to="/category/nature-plants">Nature &amp; Plants</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/science-nature-education">Science, Nature & Education</NavLink>
+                    <NavLink activeClassName="active" to="/category/news-politics">News &amp; Politics</NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/weapons">Weapons</NavLink>
+                    <NavLink activeClassName="active" to="/category/people">People</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/places-travel">Places &amp; Travel</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/science-technology">Science &amp; Technology</NavLink>
+                </li>
+                <li className="item">
+                    <NavLink activeClassName="active" to="/category/sports-fitness">Sports &amp; Fitness</NavLink>
                 </li>
             </ul>
         </div>

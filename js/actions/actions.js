@@ -95,9 +95,12 @@ function getModels( dispatch, key, query, cursor ) {
         sketchabDataApi.models.get( requestQuery ).then( ( response ) => {
 
             isRequestPending[ key ] = false;
-            var urlParts = Url.parse( response.next, true );
-            var urlQuery = urlParts.query;
-            var nextCursor = urlQuery.cursor || '';
+            var nextCursor = '';
+            if ( response.next ) {
+                var urlParts = Url.parse( response.next, true );
+                var urlQuery = urlParts.query;
+                nextCursor = urlQuery.cursor || '';
+            }
 
             var models = response.results.map( ( model ) => {
                 model.viewerUrl = 'https://sketchfab.com/models/' + model.uid;
