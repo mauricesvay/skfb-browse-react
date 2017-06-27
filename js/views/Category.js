@@ -14,7 +14,7 @@ function mapStateToProps( state, ownProps ) {
     };
     var key = JSON.stringify( query );
     var models = state.models[ key ] ?
-        state.models[ key ].models.map( uid => state.allModels[ uid ] ) : [];
+        state.models[ key ].models.map( uid => state.entities.models[ uid ] ) : [];
     var isLoading = !!state.isLoading[ key ];
     var nextCursor = state.models[ key ] ?
         state.models[ key ].nextCursor :

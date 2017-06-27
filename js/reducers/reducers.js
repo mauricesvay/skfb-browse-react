@@ -10,8 +10,10 @@ import loadingReducer from './loading';
 const MainReducer = combineReducers( {
     user: userReducer,
     models: modelsReducer,
-    allModels: allModelsReducer,
     isLoading: loadingReducer,
+    entities: combineReducers( {
+        models: allModelsReducer,
+    } )
 } );
 
 module.exports = MainReducer;
