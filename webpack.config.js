@@ -24,5 +24,11 @@ module.exports = {
         new webpack.EnvironmentPlugin( {
             NODE_ENV: 'production'
         } )
-    ]
+    ],
+    resolve: {
+        alias: {
+            'react': 'preact-compat',
+            'react-dom': 'preact-compat'
+        }
+    }
 };
