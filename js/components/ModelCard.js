@@ -17,21 +17,9 @@ class Model extends React.Component {
     }
 
     _getFallback() {
-        sketchfabDataApi.model.getFallback( this.props.model.uid ).then( ( result ) => {
-            var fallback = null;
-            if ( result.images && result.images.length ) {
-                fallback = result.images.reduce( function ( previous, current ) {
-                    if ( current.height === 180 ) {
-                        return current;
-                    } else {
-                        return previous;
-                    }
-                } );
-            }
-            this.setState( {
-                fallback: fallback
-            } );
-        } );
+        if ( this.props.hoverHandler ) {
+            this.props.hoverHandler( this.props.model.uid );
+        }
     }
 
     handleMouseEnter( e ) {
@@ -82,7 +70,7 @@ class Model extends React.Component {
             }
         }
 
-        var fallbackUrl = this.state.fallback && this.state.fallback.url;
+        var fallbackUrl = this.props.model.fallback && this.props.model.fallback.url;
         var avatar = this.getAvatar( 32 );
         var classNames = 'modelcard';
         if ( this.props.model.staffpickedAt !== null ) {

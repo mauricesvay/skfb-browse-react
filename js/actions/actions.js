@@ -13,6 +13,10 @@ const FETCH_MODEL_REQUEST = 'FETCH_MODEL_REQUEST';
 const FETCH_MODEL_SUCCESS = 'FETCH_MODEL_SUCCESS';
 const FETCH_MODEL_ERROR = 'FETCH_MODEL_ERROR';
 
+const FETCH_FALLBACK_REQUEST = 'FETCH_FALLBACK_REQUEST';
+const FETCH_FALLBACK_SUCCESS = 'FETCH_FALLBACK_SUCCESS';
+const FETCH_FALLBACK_ERROR = 'FETCH_FALLBACK_ERROR';
+
 var isRequestPending = {};
 
 function getCollectionModels( dispatch, key, query, cursor ) {
@@ -168,6 +172,36 @@ function getModel( dispatch, uid ) {
 
 }
 
+function getFallback( dispatch, uid ) {
+    sketchabDataApi.model.getFallback( uid ).then( ( result ) => {
+        var fallback = null;
+        if ( result.images && result.images.length ) {
+            fallback = result.images.reduce( function ( previous, current ) {
+                if ( current.height === 180 ) {
+                    return current;
+                } else {
+                    return previous;
+                }
+            } );
+            dispatch( {
+                type: FETCH_FALLBACK_SUCCESS,
+                uid: uid,
+                fallback: fallback
+            } );
+        } else {
+            dispatch( {
+                type: FETCH_FALLBACK_ERROR,
+                uid: uid
+            } );
+        }
+    } ).catch( () => {
+        dispatch( {
+            type: FETCH_FALLBACK_ERROR,
+            uid: uid
+        } );
+    } );
+}
+
 function search( dispatch, key, query, cursor ) {
 
     if ( isRequestPending[ key ] ) {
@@ -217,6 +251,10 @@ module.exports = {
     FETCH_MODEL_SUCCESS: FETCH_MODEL_SUCCESS,
     FETCH_MODEL_ERROR: FETCH_MODEL_ERROR,
 
+    FETCH_FALLBACK_REQUEST: FETCH_FALLBACK_REQUEST,
+    FETCH_FALLBACK_SUCCESS: FETCH_FALLBACK_SUCCESS,
+    FETCH_FALLBACK_ERROR: FETCH_FALLBACK_ERROR,
+
     requestModels: function ( key, query, cursor ) {
         return function ( dispatch ) {
             dispatch( {
@@ -251,4 +289,15 @@ module.exports = {
             getModel( dispatch, uid );
         }
     },
+
+    requestFallback: function ( uid ) {
+        return function ( dispatch ) {
+            dispatch( {
+                type: FETCH_FALLBACK_REQUEST,
+                uid: uid
+            } );
+
+            getFallback( dispatch, uid );
+        }
+    }
 };

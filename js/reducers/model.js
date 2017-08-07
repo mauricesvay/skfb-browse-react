@@ -1,6 +1,7 @@
 import {
     FETCH_MODELS_SUCCESS,
-    FETCH_MODEL_SUCCESS
+    FETCH_MODEL_SUCCESS,
+    FETCH_FALLBACK_SUCCESS,
 } from '../actions/actions';
 
 function allModelsReducer( state = {}, action ) {
@@ -27,6 +28,15 @@ function allModelsReducer( state = {}, action ) {
         var newState = {
             ...state,
             [ uid ]: action.model
+        }
+        return newState;
+    case FETCH_FALLBACK_SUCCESS:
+        var newState = {
+            ...state
+        };
+        var uid = action.uid;
+        if ( newState[ uid ] ) {
+            newState[ uid ].fallback = action.fallback;
         }
         return newState;
     default:

@@ -2,7 +2,8 @@ import {
     connect
 } from 'react-redux';
 import {
-    requestModels
+    requestModels,
+    requestFallback
 } from '../actions/actions';
 import qs from 'qs';
 import Grid from '../components/Grid';
@@ -43,6 +44,9 @@ function mapDispatchToProps( dispatch, ownProps ) {
     return {
         requestModels: ( cursor ) => {
             dispatch( requestModels( key, query, cursor ) )
+        },
+        requestFallback: ( uid ) => {
+            dispatch( requestFallback( uid ) )
         }
     }
 }

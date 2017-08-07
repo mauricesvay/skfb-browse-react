@@ -63,10 +63,16 @@ class Grid extends React.Component {
         }
     }
 
+    handleModelHover( uid ) {
+        if ( this.props.requestFallback ) {
+            this.props.requestFallback( uid );
+        }
+    }
+
     renderItem( index /*, key*/ ) {
         var model = this.props.models[ index ];
         return (
-            <Model key={model.uid} model={model} clickHandler={this.handleModelClick.bind( this )}></Model>
+            <Model key={model.uid} model={model} clickHandler={this.handleModelClick.bind( this )} hoverHandler={this.handleModelHover.bind(this)}></Model>
         );
     }
 
