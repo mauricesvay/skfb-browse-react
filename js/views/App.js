@@ -1,16 +1,17 @@
 import React from 'react'
-import { Switch, Redirect, Route, NavLink } from 'react-router-dom'
+import {
+    Switch,
+    Redirect,
+    Route,
+    NavLink
+} from 'react-router-dom'
 
 import Sidebar from '../components/Sidebar';
 import SearchForm from '../components/SearchForm';
 import UserInfo from '../components/UserInfoContainer';
 
-import Staffpicks from './Staffpicks';
-import Popular from './Popular';
-import Recent from './Recent';
 import Search from './Search';
-import Category from './Category';
-import Collection from './Collection';
+import Models from './Models';
 import ModelDetail from './ModelDetail';
 
 import Modal from '../components/Modal';
@@ -18,15 +19,19 @@ import Modal from '../components/Modal';
 class App extends React.Component {
 
     componentWillUpdate( nextProps ) {
-        const { location } = this.props
-        if (nextProps.history.action !== 'POP' && ( !location.state || !location.state.modal )) {
+        const {
+            location
+        } = this.props
+        if ( nextProps.history.action !== 'POP' && ( !location.state || !location.state.modal ) ) {
             this.previousLocation = this.props.location
         }
     }
 
-    render( ) {
+    render() {
 
-        const { location } = this.props;
+        const {
+            location
+        } = this.props;
         const isModal = !!( location.state && location.state.modal && this.previousLocation !== location );
 
         return <div className="app">
@@ -47,12 +52,12 @@ class App extends React.Component {
                     <Switch location={isModal
                         ? this.previousLocation
                         : location}>
-                        <Route path="/staffpicks" component={Staffpicks}/>
-                        <Route path="/popular" component={Popular}/>
-                        <Route path="/recent" component={Recent}/>
+                        <Route path="/staffpicks" component={Models}/>
+                        <Route path="/popular" component={Models}/>
+                        <Route path="/recent" component={Models}/>
                         <Route path="/search" component={Search}/>
-                        <Route path="/category/:category" component={Category}/>
-                        <Route path="/collection/:id" component={Collection}/>
+                        <Route path="/category/:category" component={Models}/>
+                        <Route path="/collection/:id" component={Models}/>
                         <Route path='/model/:id' component={ModelDetail}/>
                         <Route exact path="/" render={( ) => ( <Redirect to="/staffpicks"/> )}/>
                     </Switch>
