@@ -42,15 +42,6 @@ body,
     overflow: auto;
 }
 
-
-.modelDetail,
-.modelDetail iframe {
-    display: block;
-    border: 0;
-    width: 100%;
-    height: 100%;
-}
-
 .popup-container,
 .popup-overlay {
     position: absolute;
@@ -64,17 +55,10 @@ body,
 }
 .popup-model {
     position: absolute;
-    width: 80vw;
+    width: 90vw;
     height: 90vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: #000000;
-}
-.popup-model iframe {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
 }
