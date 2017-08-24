@@ -8,13 +8,15 @@ import {
 import ModelDetail from '../components/ModelDetail';
 
 function mapStateToProps( state, ownProps ) {
-    console.log( 'ModelDetails', state );
-    var uid = ownProps.match.params.id;
+
+    const uid = ownProps.match.params.id;
+    const model = state.entities.models[ uid ] ?
+        state.entities.models[ uid ] :
+        null;
+
     return {
         uid: uid,
-        model: state.entities.models[ uid ] ?
-            state.entities.models[ uid ] :
-            null
+        model: model
     }
 }
 
