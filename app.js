@@ -1,4 +1,4 @@
-import css from './www/styles/app.css';
+import css from './styles/app.css';
 
 import React from 'react';
 import {
