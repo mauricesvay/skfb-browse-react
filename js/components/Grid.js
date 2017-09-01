@@ -17,9 +17,9 @@ class Grid extends React.Component {
         if ( this.props.match.params.category != prevProps.match.params.category ) {
             this.fetchModels();
         }
-        // if ( this.props.location.query.q != prevProps.location.query.q ) {
-        //     this.fetchModels( );
-        // }
+        if ( this.props.location.search != prevProps.location.search ) {
+            this.fetchModels();
+        }
     }
 
     fetchModels() {
