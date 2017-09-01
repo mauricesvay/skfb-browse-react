@@ -3,6 +3,7 @@ import SketchfabDataApi from '../lib/api';
 import {
     Link
 } from 'react-router-dom';
+import FallbackPreview from './FallbackPreview';
 
 const sketchfabDataApi = new SketchfabDataApi();
 
@@ -70,7 +71,6 @@ class Model extends React.Component {
             }
         }
 
-        var fallbackUrl = this.props.model.fallback && this.props.model.fallback.url;
         var avatar = this.getAvatar( 32 );
         var classNames = 'modelcard';
         if ( this.props.model.staffpickedAt !== null ) {
@@ -84,13 +84,7 @@ class Model extends React.Component {
                         <div className="modelcard-preview" style={{
                             backgroundImage: 'url(' + preview + ')'
                         }}>
-                            <div className="fallback-container">
-                                <div className="fallback-image" style={{
-                                    backgroundImage: 'url(' + ( fallbackUrl
-                                        ? fallbackUrl
-                                        : '' ) + ')'
-                                }}></div>
-                            </div>
+                            <FallbackPreview fallback={this.props.model.fallback}></FallbackPreview>
                             <div className="fallback-loader"></div>
                             <div className="meta">
                                 <span className={this.props.model.likeCount > 0
