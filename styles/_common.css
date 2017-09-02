@@ -193,6 +193,7 @@ a {
         user-select: text;
         opacity: 0;
         transition: opacity .5s;
+        pointer-events: none;
     }
     .modelcard:hover .modelcard-info {
         opacity: 1;
@@ -211,8 +212,8 @@ a {
         background-repeat: no-repeat;
         background-position: left center;
 
-        transform: scale(1.2);
-        animation: loop 1.5s steps(15) infinite;
+        /*transform: scale(1.2);*/
+        /*animation: loop 1.5s steps(15) infinite;*/
         visibility: hidden;
     }
     .fallback-loader {
