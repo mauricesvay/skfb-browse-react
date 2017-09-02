@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class FallbackPreview extends React.Component {
     render() {
@@ -6,14 +6,16 @@ class FallbackPreview extends React.Component {
 
         return (
             <div className="fallback-container">
-                <div className="fallback-image" style={{
-                    backgroundImage: 'url(' + ( fallbackUrl
-                        ? fallbackUrl
-                        : '' ) + ')'
-                }}></div>
+                <div
+                    className="fallback-image"
+                    style={{
+                        backgroundImage:
+                            "url(" + (fallbackUrl ? fallbackUrl : "") + ")"
+                    }}
+                />
             </div>
         );
     }
-};
+}
 
 export default FallbackPreview;

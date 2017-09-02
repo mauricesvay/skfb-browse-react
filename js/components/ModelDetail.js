@@ -1,29 +1,32 @@
-import React from 'react';
+import React from "react";
 
 class ModelDetail extends React.Component {
-
     componentWillMount() {
-        if ( !this.props.model ) {
-            this.props.requestModel( this.props.uid );
+        if (!this.props.model) {
+            this.props.requestModel(this.props.uid);
         }
     }
 
     render() {
-
         const model = this.props.model;
 
-        if ( model !== null ) {
+        if (model !== null) {
             return (
                 <div className="modelDetail">
                     <div className="modelDetail__viewer">
-                        <iframe src={model.embedUrl + '?autostart=1'} allowfullscreen></iframe>
+                        <iframe
+                            src={model.embedUrl + "?autostart=1"}
+                            allowfullscreen
+                        />
                     </div>
                     <div className="modelDetail__info">
                         <h1 className="modelDetail__title">{model.name}</h1>
-                        <span>by {model.user.displayName} on {model.publishedAt}</span>
+                        <span>
+                            by {model.user.displayName} on {model.publishedAt}
+                        </span>
                         <div className="modelDetail__description">
                             {model.description}
-                            {model.tags.map(tag => '#' + tag.name).join(', ')}
+                            {model.tags.map(tag => "#" + tag.name).join(", ")}
                         </div>
                         <ul>
                             <li>Likes: {model.likeCount}</li>
@@ -31,7 +34,12 @@ class ModelDetail extends React.Component {
                             <li>Downloads: {model.downloadCount}</li>
                             <li>Faces: {model.faceCount}</li>
                             <li>Vertex: {model.vertexCount}</li>
-                            <li>Categories: {model.categories.map(category => category.name).join(', ')}</li>
+                            <li>
+                                Categories:{" "}
+                                {model.categories
+                                    .map(category => category.name)
+                                    .join(", ")}
+                            </li>
                             <li>Comments: {model.commentCount}</li>
                         </ul>
                     </div>
@@ -41,9 +49,9 @@ class ModelDetail extends React.Component {
             return (
                 <div className="modelDetail">
                     <div className="modelDetail__viewer">
-                        <iframe src="about:blank"></iframe>
+                        <iframe src="about:blank" />
                     </div>
-                    <div className="modelDetail__info"></div>
+                    <div className="modelDetail__info" />
                 </div>
             );
         }
@@ -53,6 +61,6 @@ class ModelDetail extends React.Component {
 ModelDetail.propTypes = {
     uid: React.PropTypes.string.isRequired,
     model: React.PropTypes.object
-}
+};
 
 module.exports = ModelDetail;
