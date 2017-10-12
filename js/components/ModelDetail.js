@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class ModelDetail extends React.Component {
     componentWillMount() {
@@ -59,8 +60,8 @@ class ModelDetail extends React.Component {
 }
 
 ModelDetail.propTypes = {
-    uid: React.PropTypes.string.isRequired,
-    model: React.PropTypes.object
+    uid: PropTypes.string.isRequired,
+    model: PropTypes.object
 };
 
 module.exports = ModelDetail;

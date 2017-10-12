@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../User";
+import PropTypes from "prop-types";
 
 class UserInfo extends React.Component {
     render() {
@@ -24,8 +25,8 @@ class UserInfo extends React.Component {
 }
 
 UserInfo.propTypes = {
-    onLoginClick: React.PropTypes.func.isRequired,
-    onLogoutClick: React.PropTypes.func.isRequired
+    onLoginClick: PropTypes.func.isRequired,
+    onLogoutClick: PropTypes.func.isRequired
 };
 
 module.exports = UserInfo;

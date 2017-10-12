@@ -36,11 +36,5 @@ module.exports = {
             NODE_ENV: "production"
         }),
         new ExtractTextPlugin("styles.css")
-    ],
-    resolve: {
-        alias: {
-            react: "preact-compat",
-            "react-dom": "preact-compat"
-        }
-    }
+    ]
 };
