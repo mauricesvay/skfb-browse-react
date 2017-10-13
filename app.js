@@ -17,7 +17,8 @@ let store = createStore(
     reducers,
     {
         user: {
-            accessToken: User.getAccessToken()
+            accessToken: User.getAccessToken(),
+            likes: {}
         }
     },
     composeEnhancers(applyMiddleware(thunkMiddleware))

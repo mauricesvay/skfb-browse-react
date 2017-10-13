@@ -13,7 +13,7 @@ const Modal = ({ match, history }) => {
             <div className="popup-model">
                 <ModelDetail match={match} />
             </div>
-            <button onClick={back}>x</button>
+            <button className="closeButton" onClick={back}>x</button>
         </div>
     );
 };

@@ -24,7 +24,7 @@
 .modelDetail__info {
     box-sizing: border-box;
     flex: 0 0 300px;
-    padding: 30px;
+    padding: 32px;
     overflow: auto;
     font-size: 14px;
 }
@@ -35,6 +35,14 @@
 }
 
 .modelDetail__title {
-    font-size: 24px;
+    font-size: 18px;
     margin-top: 0;
+}
+
+.modelDetail__meta {
+    color: #CCC;
+}
+
+.modelDetail_actions {
+    padding: 8px 0;
 }

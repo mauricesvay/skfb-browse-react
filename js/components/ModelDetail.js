@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import LikeButton from "./LikeButton";
+import relativeDate from "relative-date";
 
 class ModelDetail extends React.Component {
     componentWillMount() {
@@ -12,19 +14,23 @@ class ModelDetail extends React.Component {
         const model = this.props.model;
 
         if (model !== null) {
+            const humanDate = relativeDate(new Date(model.publishedAt));
             return (
                 <div className="modelDetail">
                     <div className="modelDetail__viewer">
                         <iframe
                             src={model.embedUrl + "?autostart=1"}
-                            allowfullscreen
+                            allowFullScreen
                         />
                     </div>
                     <div className="modelDetail__info">
                         <h1 className="modelDetail__title">{model.name}</h1>
-                        <span>
-                            by {model.user.displayName} on {model.publishedAt}
+                        <span className="modelDetail__meta">
+                            <span className="modelDetail_author">by {model.user.displayName}</span> (<span className="modelDetail_date" title={model.publishedAt}>{humanDate}</span>)
                         </span>
+                        <div className="modelDetail_actions">
+                            <LikeButton model={model} />
+                        </div>
                         <div className="modelDetail__description">
                             {model.description}
                             {model.tags.map(tag => "#" + tag.name).join(", ")}
