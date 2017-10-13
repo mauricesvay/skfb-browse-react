@@ -8,6 +8,7 @@ var MODELS_ENDPOINT = "/v3/models";
 var SEARCH_ENDPOINT = "/v3/search";
 var COLLECTIONS_ENDPOINT = "/v3/collections";
 var FEED_ENDPOINT = "/i/feeds";
+var ME_LIKES_ENDPOINT = "/v3/me/likes";
 
 var isDev = process.env.NODE_ENV === "development";
 
@@ -137,6 +138,39 @@ SketchfabDataApi.prototype = {
                 }
             });
             return instance.get(FEED_ENDPOINT);
+        }
+    },
+
+    likes: {
+        add: function(uid) {
+            var instance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    Authorization: "Bearer " + User.getAccessToken()
+                }
+            });
+            return instance.post(ME_LIKES_ENDPOINT, {
+                model: uid
+            });
+        },
+        remove: function(uid) {
+            var instance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    Authorization: "Bearer " + User.getAccessToken()
+                }
+            });
+            return instance.delete(ME_LIKES_ENDPOINT + "/" + uid);
+        },
+        contains: function(uid) {
+            var endpoint = ME_LIKES_ENDPOINT + '/contains?model_uids=' + uid;
+            var instance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    Authorization: "Bearer " + User.getAccessToken()
+                }
+            });
+            return instance.get(endpoint);
         }
     }
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import LikeButton from "./LikeButton";
 
 class ModelDetail extends React.Component {
     componentWillMount() {
@@ -17,7 +18,7 @@ class ModelDetail extends React.Component {
                     <div className="modelDetail__viewer">
                         <iframe
                             src={model.embedUrl + "?autostart=1"}
-                            allowfullscreen
+                            allowFullScreen
                         />
                     </div>
                     <div className="modelDetail__info">
@@ -25,6 +26,9 @@ class ModelDetail extends React.Component {
                         <span>
                             by {model.user.displayName} on {model.publishedAt}
                         </span>
+                        <div>
+                            <LikeButton model={model} />
+                        </div>
                         <div className="modelDetail__description">
                             {model.description}
                             {model.tags.map(tag => "#" + tag.name).join(", ")}
