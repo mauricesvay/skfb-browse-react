@@ -12,42 +12,57 @@ var ME_LIKES_ENDPOINT = "/v3/me/likes";
 
 var isDev = process.env.NODE_ENV === "development";
 
+function getAxiosInstance() {
+    if (!User.isConnected()) {
+        return;
+    }
+    return axios.create({
+        baseURL: BASE_URL,
+        headers: {
+            Authorization: "Bearer " + User.getAccessToken()
+        }
+    });
+}
+
 function apiGet(url, config) {
+    // Only cache url that have a cursor
+    var useCache = url.indexOf("cursor=") !== -1;
+
     return new Promise(function(resolve, reject) {
-        // only cache requests with cursor
-        if (url.indexOf("cursor=") !== -1) {
-            localforage
-                .getItem(url)
-                .then(data => {
-                    if (data !== null) {
-                        isDev && console.log("Cache HIT", url);
-                        resolve(data);
-                    } else {
-                        isDev && console.log("Cache MISS", url);
-                        axios
-                            .get(url, config)
-                            .then(response => {
-                                localforage.setItem(url, response.data);
-                                resolve(response.data);
-                            })
-                            .catch(error => {
-                                reject(error);
-                            });
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        } else {
+        if (!useCache) {
             axios
                 .get(url, config)
                 .then(response => {
                     resolve(response.data);
                 })
-                .catch(error => {
-                    reject(error);
-                });
+                .catch(reject);
+            return;
         }
+
+        localforage
+            .getItem(url)
+            .then(data => {
+                if (data !== null) {
+                    isDev && console.info("Cache HIT", url);
+                    resolve(data);
+                } else {
+                    isDev && console.info("Cache MISS", url);
+                    axios
+                        .get(url, config)
+                        .then(response => {
+                            localforage.setItem(url, response.data, function(
+                                error
+                            ) {
+                                if (error) {
+                                    console.error("Localforage error", error);
+                                }
+                            });
+                            resolve(response.data);
+                        })
+                        .catch(reject);
+                }
+            })
+            .catch(reject);
     });
 }
 
@@ -67,9 +82,7 @@ SketchfabDataApi.prototype = {
                         modelInfo.fallback = responses[1].data.results;
                         resolve(modelInfo);
                     })
-                    .catch(function(error) {
-                        reject(error);
-                    });
+                    .catch(reject);
             });
         },
 
@@ -87,9 +100,7 @@ SketchfabDataApi.prototype = {
                                 localforage.setItem(url, response.data.results);
                                 resolve(response.data.results);
                             })
-                            .catch(function(error) {
-                                reject(error);
-                            });
+                            .catch(reject);
                     }
                 });
             });
@@ -131,45 +142,25 @@ SketchfabDataApi.prototype = {
                 return;
             }
 
-            var instance = axios.create({
-                baseURL: BASE_URL,
-                headers: {
-                    Authorization: "Bearer " + User.getAccessToken()
-                }
-            });
+            var instance = getAxiosInstance();
             return instance.get(FEED_ENDPOINT);
         }
     },
 
     likes: {
         add: function(uid) {
-            var instance = axios.create({
-                baseURL: BASE_URL,
-                headers: {
-                    Authorization: "Bearer " + User.getAccessToken()
-                }
-            });
+            var instance = getAxiosInstance();
             return instance.post(ME_LIKES_ENDPOINT, {
                 model: uid
             });
         },
         remove: function(uid) {
-            var instance = axios.create({
-                baseURL: BASE_URL,
-                headers: {
-                    Authorization: "Bearer " + User.getAccessToken()
-                }
-            });
+            var instance = getAxiosInstance();
             return instance.delete(ME_LIKES_ENDPOINT + "/" + uid);
         },
         contains: function(uid) {
-            var endpoint = ME_LIKES_ENDPOINT + '/contains?model_uids=' + uid;
-            var instance = axios.create({
-                baseURL: BASE_URL,
-                headers: {
-                    Authorization: "Bearer " + User.getAccessToken()
-                }
-            });
+            var endpoint = ME_LIKES_ENDPOINT + "/contains?model_uids=" + uid;
+            var instance = getAxiosInstance();
             return instance.get(endpoint);
         }
     }
