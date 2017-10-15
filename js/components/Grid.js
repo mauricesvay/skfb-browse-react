@@ -52,7 +52,6 @@ class Grid extends React.Component {
             e.preventDefault();
             var id = e.currentTarget.getAttribute("data-uid");
 
-            console.log(this.props);
             this.props.history.push({
                 pathname: `/model/${id}`,
                 state: {
