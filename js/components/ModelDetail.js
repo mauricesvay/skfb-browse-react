@@ -17,7 +17,7 @@ class ModelDetail extends React.Component {
             return (
                 <div className="modelDetail">
                     <div className="modelDetail__viewer">
-                        <iframe src="about:blank" />
+                        <iframe src="about:blank" allow="vr" allowfullscreen />
                     </div>
                     <div className="modelDetail__info" />
                 </div>
@@ -69,6 +69,9 @@ class ModelDetail extends React.Component {
                     <ul className="modelDetail__stats">
                         <li>Faces: {model.faceCount}</li>
                         <li>Vertex: {model.vertexCount}</li>
+                    </ul>
+                    <ul className="modelDetail__stats">
+                        <li><a href={'https://crimson-jellyfish.glitch.me/gif/' + model.uid} target="_blank">Get GIF</a></li>
                     </ul>
                 </div>
             </div>
