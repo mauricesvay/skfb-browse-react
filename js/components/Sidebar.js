@@ -142,11 +142,6 @@ let Sidebar = props => (
                     </NavLink>
                 </li>
                 <li className="item">
-                    <NavLink activeClassName="active" to="/category/gaming">
-                        Gaming
-                    </NavLink>
-                </li>
-                <li className="item">
                     <NavLink activeClassName="active" to="/category/music">
                         Music
                     </NavLink>
@@ -194,6 +189,14 @@ let Sidebar = props => (
                         to="/category/sports-fitness"
                     >
                         Sports &amp; Fitness
+                    </NavLink>
+                </li>
+                <li className="item">
+                    <NavLink
+                        activeClassName="active"
+                        to="/category/weapons-military"
+                    >
+                        Weapons &amp; Military
                     </NavLink>
                 </li>
             </ul>
