@@ -114,6 +114,7 @@ class Model extends React.Component {
                         href={this.props.model.viewerUrl}
                         target="_blank"
                         onClick={this.props.clickHandler}
+                        data-uid={this.props.model.uid}
                     >
                         <div
                             className="modelcard-preview"
