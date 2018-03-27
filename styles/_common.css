@@ -181,6 +181,24 @@ a {
             vertical-align: top;
             margin-right: 2px;
         }
+
+    .modelcard button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0;
+        background: transparent;
+        color: #FFF;
+        font-size: 11px;
+        opacity: 0;
+    }
+
+    .modelcard button:hover {
+        opacity: 0.5;
+        border: 0;
+        background: #1CAAD9;
+    }
+
     .modelcard-info {
         position: absolute;
         bottom: 0;

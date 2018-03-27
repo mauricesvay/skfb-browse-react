@@ -1,5 +1,6 @@
 import React from "react";
 import ReactList from "react-list";
+import axios from "axios";
 import { requestModels } from "../actions/actions";
 import Model from "./ModelCard";
 
@@ -67,6 +68,18 @@ class Grid extends React.Component {
         }
     }
 
+    handleIsScanClick(uid) {
+        axios({
+            method: "post",
+            url:
+                "https://script.google.com/macros/s/AKfycbyPsFd29tbQpm9gFqNP7uTKvim_05bU5KSQCigBTnvg-_M9KnHV/exec",
+            data: "model=" + uid,
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded"
+            }
+        });
+    }
+
     renderItem(index /*, key*/) {
         var model = this.props.models[index];
         return (
@@ -75,6 +88,7 @@ class Grid extends React.Component {
                 model={model}
                 clickHandler={this.handleModelClick.bind(this)}
                 hoverHandler={this.handleModelHover.bind(this)}
+                clickIsScanHandler={this.handleIsScanClick.bind(this)}
             />
         );
     }
