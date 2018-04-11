@@ -15,9 +15,9 @@ module.exports = {
         cookie.set("accessToken", token);
     },
 
-    connect() {
+    connect(params) {
         var client = new SketchfabOAuth2(config.oauth2);
-        return client.connect();
+        return client.connect(params);
     },
 
     logout() {
