@@ -73,7 +73,9 @@ module.exports = {
                 type: LOGIN_REQUEST
             });
 
-            User.connect()
+            User.connect({
+                "approval_prompt": "auto"
+            })
                 .then(function(grant) {
                     User.setAccessToken(grant.access_token);
                     dispatch({
